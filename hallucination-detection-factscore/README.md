@@ -1,0 +1,1 @@
+The FActScore method for hallucination detection has been chosen as a testbed for IVCAP service deployment. This repository contains the code that implements and containerizers the service for deployment.

@@ -1,0 +1,3 @@
+openai
+nltk
+ivcap_sdk_service
