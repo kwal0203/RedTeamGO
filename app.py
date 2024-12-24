@@ -1,4 +1,4 @@
-from models import HuggingFaceModel
+from fastapi_models.models import HuggingFaceModel
 from data import PromptInjectionData
 from typing import Any
 from openai import OpenAI
@@ -11,11 +11,14 @@ from utils import (
 )
 
 from html_snippets import *
-from env import OPENAI_API_KEY
 
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
+API_KEY = os.getenv("OPENAI_API_KEY")
 
 import streamlit as st
-import torch
 
 
 ### User interface
@@ -48,11 +51,10 @@ def update_model_ui(model_name: Any) -> None:
     st.session_state.messages = []
     st.session_state.model_client = None
     st.session_state.previous_model_client = None
-    torch.cuda.empty_cache()
     if model_name == "llama3-instruct":
         client = HuggingFaceModel(name="meta-llama/Meta-Llama-3-8B-Instruct")
     elif model_name == "gpt-3.5-turbo":
-        client = OpenAI(api_key=OPENAI_API_KEY)
+        client = OpenAI(api_key=API_KEY)
     else:
         st.markdown("Unknown model")
 
@@ -71,8 +73,8 @@ st.markdown(TITLE, unsafe_allow_html=True)
 # Default model, OpenAI API
 # TODO: Need to update this to retain previous state values
 st.session_state.model_name = "gpt-3.5-turbo"
-st.session_state.model_client = OpenAI(api_key=OPENAI_API_KEY)
-st.session_state.model_client_semantic = OpenAI(api_key=OPENAI_API_KEY)
+st.session_state.model_client = OpenAI(api_key=API_KEY)
+st.session_state.model_client_semantic = OpenAI(api_key=API_KEY)
 st.session_state.attack = "none"
 st.session_state.attack_nice = "No attack"
 st.session_state.mode = "Manual"
