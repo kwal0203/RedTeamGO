@@ -1,8 +1,6 @@
-from models import ToxicityEvaluationModel
+from fastapi_models.models import ToxicityEvaluationModel
 from typing import List, Any, Dict
 
-import numpy as np
-import random
 import json
 import fitz
 import csv
