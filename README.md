@@ -1,7 +1,7 @@
 # RedTeamGO
 
 ## Overview
-This project provides a **Red Teaming System** designed to rigorously test and evaluate the security, robustness, and ethical behavior of large language models (LLMs). The system generates adversarial scenarios to expose vulnerabilities and ensure the models meet high standards of safety and reliability.
+This project provides a proof-of-concept **Red Teaming System** designed to rigorously test and evaluate the security, robustness, and ethical behavior of Large Language Models (LLMs). The system generates adversarial scenarios to expose vulnerabilities and ensure the models meet high standards of safety and reliability.
 
 ## Features
 - **Adversarial Prompt Generation:** Automatically creates challenging prompts to test the boundaries of LLM behavior.
@@ -10,7 +10,7 @@ This project provides a **Red Teaming System** designed to rigorously test and e
 - **Customizable Framework:** Supports user-defined testing parameters and adversarial strategies.
 
 ## Use Cases
-- Identifying vulnerabilities in large language models.
+- Identifying vulnerabilities in LLMs.
 - Evaluating the robustness of LLMs against adversarial inputs.
 - Ensuring compliance with ethical and safety standards.
 
