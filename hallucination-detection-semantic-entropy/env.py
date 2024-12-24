@@ -1,2 +1,0 @@
-device = "CPU_OR_CUDA"
-OPENAI_API_KEY = "YOUR_API_KEY"
