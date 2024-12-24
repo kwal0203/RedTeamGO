@@ -1,46 +1,13 @@
-from ivcap_sdk_service import Service, Parameter, Type, SupportedMimeTypes, ServiceArgs
-from ivcap_sdk_service import register_service, publish_artifact, create_metadata
-
 from src.utility.atomic_facts import get_atomic_facts
 from src.services.hallucination_detection import detect
 
-import logging
-import json
 import nltk
 
-
-"""
-IVCAP service code.
-"""
-logger = None  # set when called by SDK
-
-SERVICE = Service(
-    name="hallucination-detection-factscore",
-    description="Proof of concept hallucination detection system using FActScore method for document summarization.",
-    parameters=[
-        Parameter(
-            name="summary",
-            type=Type.STRING,
-            description="Document summary.",
-        ),
-        Parameter(
-            name="source",
-            type=Type.STRING,
-            description="Ground truth.",
-        ),
-    ],
-)
+from typing import Any
 
 
-def service(args: ServiceArgs, svc_logger: logging):
-    """Called after the service has started and all paramters have been parsed and validated
-
-    Args:
-        args (ServiceArgs): A Dict where the key is one of the `Parameter` defined in the above `SERVICE`
-        svc_logger (logging): Logger to use for reporting information on the progress of execution
-    """
-    global logger
-    logger = svc_logger
+def service(args: Any) -> Any:
+    # TODO: Convert to Google style comments
 
     ### FActScore
     # Summary
@@ -62,18 +29,4 @@ def service(args: ServiceArgs, svc_logger: logging):
     result_json = detect(source=args.source, atomic_facts=atomic_facts)
     result_json["summary"] = generated_summary
 
-    meta = create_metadata(
-        "urn:guardrails:schema:hallucination-detection-factscore", **args._asdict()
-    )
-
-    publish_artifact(
-        "factscore.json",
-        lambda fd: json.dump(result_json, fd, indent=4),
-        SupportedMimeTypes.JSON,
-        metadata=meta,
-    )
-
-
-####
-# Entry point
-register_service(SERVICE, service)
+    return result_json
