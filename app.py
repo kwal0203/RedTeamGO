@@ -1,4 +1,4 @@
-from fastapi_models.models import HuggingFaceModel
+from models import HuggingFaceModel
 from data import PromptInjectionData
 from typing import Any
 from openai import OpenAI

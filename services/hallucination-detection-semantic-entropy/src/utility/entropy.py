@@ -28,7 +28,7 @@ def get_generations(
 def semantic_entropy(
     entailment_model: str, model: Any, prompt: str, session_state: Any
 ) -> Dict:
-    from fastapi_models.models import EntailmentDeberta
+    from models import EntailmentDeberta
     from services.semantic_entropy import get_semantic_ids
 
     # from semantic_entropy import cluster_assignment_entropy

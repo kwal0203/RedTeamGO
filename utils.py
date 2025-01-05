@@ -1,4 +1,4 @@
-from fastapi_models.models import ToxicityEvaluationModel
+from models import ToxicityEvaluationModel
 from typing import List, Any, Dict
 
 import json
