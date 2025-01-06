@@ -10,4 +10,4 @@ def paradetox_service(args: DetectionBatch) -> Dict[str, Any]:
     response = args.prompts
 
     ### Toxicity evaluation here
-    return detect_toxicity(response=response)
+    return {"paradetox_result": detect_toxicity(response=response)}

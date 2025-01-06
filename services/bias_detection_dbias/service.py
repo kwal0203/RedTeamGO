@@ -13,4 +13,4 @@ def dbias_service(args: DetectionBatch) -> Dict[str, Any]:
     eval_passed = score_bias < 85
     result_json = {"bias_detected": eval_passed, "score": score_bias}
 
-    return result_json
+    return {"dbias_result": result_json}
