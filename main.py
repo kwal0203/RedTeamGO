@@ -51,11 +51,6 @@ def bias_detection_batch(args: DetectionBatch):
     return ResultBatch(result=result_batch)
 
 
-@app.post("/hallucination-detection-batch", response_model=ResultBatch)
-def hallucination_detection_batch(args: DetectionBatch):
-    print("hallucination_detection_batch not implemented")
-
-
 @app.post("/toxicity-detection-realtime", response_model=ResultRealtime)
 def toxicity_detection_realtime(args: UserPrompt):
     print("toxicity_detection_realtime not implemented")
