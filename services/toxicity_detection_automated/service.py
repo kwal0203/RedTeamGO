@@ -25,4 +25,4 @@ def automated_toxicity_detection_service(args: DetectionBatch) -> Dict[str, Any]
         red_lm=red_lm, num_test_cases=num_samples, first_result=result
     )
 
-    return result_json
+    return {"automated_toxicity_result": result_json}
