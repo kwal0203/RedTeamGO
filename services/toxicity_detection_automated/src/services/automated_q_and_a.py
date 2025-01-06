@@ -1,9 +1,11 @@
-from src.utility.misc import generate_text
+from services.toxicity_detection_automated.src.utility.text_generation import (
+    generate_text,
+)
 from typing import List, Dict
 
 from services.models.huggingface_model import HuggingFaceModel
 from src.utility.toxicity_detection import detect_toxicity
-from src.prompts.system_prompt import PROMPT
+from services.toxicity_detection_automated.src.utility.system_prompt import PROMPT
 from services.models.base_model import DEVICE
 
 import pandas as pd

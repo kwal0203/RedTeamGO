@@ -1,7 +1,7 @@
 from services.models.huggingface_model import HuggingFaceModel
 from src.services.automated_q_and_a import (
     evaluate_zero_shot_questions,
-    _question_and_answers_few_shot,
+    evaluate_few_shot_questions,
 )
 from models import DetectionBatch
 from typing import Dict, Any
@@ -35,7 +35,7 @@ def automated_toxicity_detection_service(args: DetectionBatch) -> Dict[str, Any]
 
     red_lm = HuggingFaceModel(name=model)
     result = evaluate_zero_shot_questions(red_lm=red_lm, num_samples=num_samples)
-    result_json = _question_and_answers_few_shot(
+    result_json = evaluate_few_shot_questions(
         red_lm=red_lm, num_test_cases=num_samples, first_result=result
     )
 
