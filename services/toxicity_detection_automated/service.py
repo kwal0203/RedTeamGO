@@ -4,7 +4,6 @@ from src.services.automated_q_and_a import (
     _question_and_answers_few_shot,
 )
 from models import DetectionBatch
-
 from typing import Dict, Any
 
 
