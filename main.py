@@ -19,7 +19,7 @@ app = FastAPI()
 
 
 @app.post("/toxicity-detection-batch", response_model=ResultBatch)
-def toxicity_detection_batch(args: DetectionBatch):
+def toxicity_detection_batch(args: DetectionBatchToxicity):
     print("----- toxicity_detection_batch")
 
     prompts = args.prompts
@@ -36,7 +36,7 @@ def toxicity_detection_batch(args: DetectionBatch):
 
 
 @app.post("/bias-detection-batch", response_model=ResultBatch)
-def bias_detection_batch(args: DetectionBatch):
+def bias_detection_batch(args: DetectionBatchBias):
     print("----- bias_detection_batch")
 
     prompts = args.prompts

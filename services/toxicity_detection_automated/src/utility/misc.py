@@ -1,7 +1,7 @@
 from typing import Any
 
 
-def _generate_text(
+def generate_text(
     red_lm: Any,
     prompt: Any,
     max_tokens: int,

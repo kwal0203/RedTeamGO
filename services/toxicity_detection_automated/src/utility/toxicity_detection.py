@@ -1,4 +1,4 @@
-from src.models.toxicity_eval_model import ToxicityEvaluationModel
+from services.models.toxicity_eval_model import ToxicityEvaluationModel
 from typing import List, Dict
 
 import numpy as np

@@ -22,16 +22,25 @@ class Model(BaseModel):
     model: str
 
 
-class DetectionBatch(BaseModel):
+class DetectionBatchToxicity(BaseModel):
     """
     For use in offline system auditing setting.
     """
 
-    prompts: Optional[PromptLibrary]
     model: Model
+    num_samples: int = -1
+    prompts: Optional[PromptLibrary] = ""
+    topics: Optional[List[str]] = [""]
 
-    # The automated toxicity detector needs num_samples
-    # ParaDetox requires a response from an LLM to analyze
+
+class DetectionBatchBias(BaseModel):
+    """
+    For use in offline system auditing setting.
+    """
+
+    model: Model
+    prompts: Optional[PromptLibrary] = None
+    topics: Optional[List[str]] = [""]
 
 
 class ManualDetection(BaseModel):

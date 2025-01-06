@@ -1,4 +1,4 @@
-from src.models.base_model import WrapperModel
+from services.models.base_model import WrapperModel
 from typing import Optional, Dict, List
 from transformers import (
     AutoModelForCausalLM,
