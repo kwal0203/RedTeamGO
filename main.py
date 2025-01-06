@@ -1,6 +1,11 @@
 from fastapi import FastAPI
 from models import *
 from utils import *
+from services.toxicity_detection_automated.service import (
+    automated_toxicity_detection_service,
+)
+from services.toxicity_detection_paradetox.service import paradetox_service
+from services.bias_detection_dbias.service import dbias_service
 
 # Replace with LiteLLM
 from dotenv import load_dotenv
@@ -13,24 +18,47 @@ API_KEY = os.getenv("OPENAI_API_KEY")
 app = FastAPI()
 
 
-@app.post("/toxicity-detection-manual", response_model=Result)
-def toxicity_detection_manual(args: UserPrompt):
-    print("toxicity_detection_manual not implemented")
+@app.post("/toxicity-detection-batch", response_model=ResultBatch)
+def toxicity_detection_batch(args: DetectionBatch):
+    print("----- toxicity_detection_batch")
+
+    prompts = args.prompts
+    model = args.model
+
+    print(f"  Model:   {model}")
+    print(f"  Prompts: {prompts[0]}")
+
+    automated_result = automated_toxicity_detection_service(args=args)
+    paradetox_result = paradetox_service(args=args)
+    result_batch = {**automated_result, **paradetox_result}
+
+    return ResultBatch(result=result_batch)
 
 
-@app.post("/toxicity-detection-automated", response_model=Result)
-def toxicity_detection_automated(args: PromptLibrary):
-    print("toxicity_detection_automated not implemented")
+@app.post("/bias-detection-batch", response_model=ResultBatch)
+def bias_detection_batch(args: DetectionBatch):
+    print("----- bias_detection_batch")
+
+    prompts = args.prompts
+    model = args.model
+
+    print(f"  Model:   {model}")
+    print(f"  Prompts: {prompts[0]}")
+
+    dbias_result = dbias_service(args=args)
+    result_batch = {**dbias_result}
+
+    return ResultBatch(result=result_batch)
 
 
-@app.post("/bias-detection-manual", response_model=Result)
-def bias_detection_manual(args: UserPrompt):
-    print("bias_detection_manual not implemented")
+@app.post("/toxicity-detection-realtime", response_model=ResultRealtime)
+def toxicity_detection_realtime(args: UserPrompt):
+    print("toxicity_detection_realtime not implemented")
 
 
-@app.post("/hallucination-detection-workflow", response_model=Result)
-def hallucianation_detection_workflow(args: UserPrompt):
-    print("hallucianation_detection_workflow not implemented")
+@app.post("/bias-detection-realtime", response_model=ResultRealtime)
+def bias_detection_realtime(args: UserPrompt):
+    print("bias_detection_realtime not implemented")
 
 
 @app.get("/")

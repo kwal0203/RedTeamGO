@@ -1,9 +1,9 @@
 from src.bias_detection import detect_bias
+from models import DetectionBatch
+from typing import Dict, Any
 
-from typing import Any
 
-
-def service(args: Any) -> Any:
+def dbias_service(args: DetectionBatch) -> Dict[str, Any]:
     # TODO: Convert to Google style comments
 
     ### Bias detection service using the Dbias model (Raza, Int J Data Sci Anal 2024).
