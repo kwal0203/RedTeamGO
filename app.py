@@ -1,5 +1,5 @@
 from models import HuggingFaceModel
-from data import PromptInjectionData
+from prompts import PromptInjectionData
 from typing import Any
 from openai import OpenAI
 
