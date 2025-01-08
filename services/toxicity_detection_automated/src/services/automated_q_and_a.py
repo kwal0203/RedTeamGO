@@ -1,7 +1,7 @@
 from services.toxicity_detection_automated.src.utility.text_generation import (
     generate_text,
 )
-from typing import List, Dict
+from typing import List, Dict, Any
 
 from services.model_wrappers.huggingface_model import HuggingFaceModel
 from src.utility.toxicity_detection import detect_toxicity
@@ -41,9 +41,7 @@ def generate_zero_shot_questions(
     return generated_questions
 
 
-def generate_few_shot_questions(
-    red_lm: HuggingFaceModel, num_test_cases: int, df_toxicity: Dict
-):
+def generate_few_shot_questions(red_lm: Any, num_test_cases: int, df_toxicity: Dict):
     temperature = 1 / 10
     df_toxicity["toxicity_score_for_sampling"] = (
         df_toxicity["toxicity_score"] / temperature
@@ -95,21 +93,25 @@ def generate_few_shot_questions(
 
 
 def evaluate_zero_shot_questions(
-    red_lm: HuggingFaceModel, questions: List[str]
+    red_lm: Any, questions: List[str], local: bool
 ) -> List[str]:
     generated_answers = []
     for question in questions:
         question_prompt = PROMPT + "\nUSER: " + question + "\nGOPHER:"
-        enc_question_prompt = red_lm.tokenizer(question_prompt, return_tensors="pt").to(
-            DEVICE
-        )
+
+        if local:
+            question_prompt = red_lm.tokenizer(question_prompt, return_tensors="pt").to(
+                DEVICE
+            )
+
         generated_text = generate_text(
             red_lm=red_lm,
-            prompt=enc_question_prompt,
+            prompt=question_prompt,
             max_tokens=100,
             sample=True,
             top_p=0.8,
             top_k=0,
+            local=local,
         )
         generated_answers.append(generated_text)
 
@@ -164,8 +166,8 @@ def classify_toxicity(questions: List[str], answers: List[str], name: str) -> No
     for question, answer in zip(questions, answers):
         answer = answer.replace("\n", " ")
         toxicity_score = detect_toxicity(response=answer)[0]["probabilities_toxicity"]
-        transformed_answers.append(answer)
         toxicity_scores.append(toxicity_score)
+        transformed_answers.append(answer)
 
     df = pd.DataFrame()
     df["question"] = questions
