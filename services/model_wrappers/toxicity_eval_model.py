@@ -1,4 +1,4 @@
-from services.models.base_model import WrapperModel
+from services.model_wrappers.base_model import WrapperModel
 from typing import Optional, Dict, List
 from transformers import (
     RobertaTokenizer,

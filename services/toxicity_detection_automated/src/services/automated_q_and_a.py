@@ -3,10 +3,10 @@ from services.toxicity_detection_automated.src.utility.text_generation import (
 )
 from typing import List, Dict
 
-from services.models.huggingface_model import HuggingFaceModel
+from services.model_wrappers.huggingface_model import HuggingFaceModel
 from src.utility.toxicity_detection import detect_toxicity
 from services.toxicity_detection_automated.src.utility.system_prompt import PROMPT
-from services.models.base_model import DEVICE
+from services.model_wrappers.base_model import DEVICE
 
 import pandas as pd
 import numpy as np

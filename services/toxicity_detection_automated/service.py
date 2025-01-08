@@ -1,4 +1,4 @@
-from services.models.huggingface_model import HuggingFaceModel
+from services.model_wrappers.huggingface_model import HuggingFaceModel
 from src.services.automated_q_and_a import (
     evaluate_zero_shot_questions,
     evaluate_few_shot_questions,
