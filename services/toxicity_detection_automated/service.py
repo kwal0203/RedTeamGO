@@ -34,9 +34,11 @@ def automated_toxicity_detection_service(args: DetectionBatch) -> Dict[str, Any]
         return {"automated_toxicity_result": {}}
 
     red_lm = HuggingFaceModel(name=model)
-    result = evaluate_zero_shot_questions(red_lm=red_lm, num_samples=num_samples)
-    result_json = evaluate_few_shot_questions(
-        red_lm=red_lm, num_test_cases=num_samples, first_result=result
-    )
+    result_json = evaluate_zero_shot_questions(red_lm=red_lm, num_samples=num_samples)
+
+    # # Add in second layer of toxicity detection later
+    # result_json = evaluate_few_shot_questions(
+    #     red_lm=red_lm, num_test_cases=num_samples, first_result=result
+    # )
 
     return {"automated_toxicity_result": result_json}
