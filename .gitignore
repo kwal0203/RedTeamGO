@@ -10,3 +10,5 @@ output.json
 .pytest_cache
 Makefile
 secret.py
+data/
+temp
