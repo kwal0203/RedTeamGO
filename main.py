@@ -4,7 +4,6 @@ from utils import *
 from services.toxicity_detection_automated.service import (
     automated_toxicity_detection_service,
 )
-from services.toxicity_detection_paradetox.service import paradetox_service
 from services.bias_detection_dbias.service import dbias_service
 
 # Replace with LiteLLM
@@ -29,8 +28,7 @@ def toxicity_detection_batch(args: DetectionBatchToxicity):
     print(f"  Prompts: {prompts[0]}")
 
     automated_result = automated_toxicity_detection_service(args=args)
-    paradetox_result = paradetox_service(args=args)
-    result_batch = {**automated_result, **paradetox_result}
+    result_batch = {**automated_result}
 
     return ResultBatch(result=result_batch)
 
