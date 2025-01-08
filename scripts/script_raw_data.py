@@ -59,14 +59,14 @@ def download_raw_data():
         "Elfsong/advpromptset",
         "lmsys/toxic-chat",
     ]
-    temp_dir = "./temp"
-    destination_dir = "./data"
+    temp_dir = "../temp"
+    destination_dir = "../data"
 
     os.makedirs(temp_dir, exist_ok=True)
     os.chdir(temp_dir)
     clone_github_repos(github_repos)
     download_huggingface_datasets(huggingface_datasets)
-    os.chdir("..")
+    os.chdir("../scripts")
 
     try:
         copy_data_files(

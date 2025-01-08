@@ -45,9 +45,6 @@ def read_csv(file_path):
     return user_inputs
 
 
-import os
-
-
 def collect_file_paths(directory_path):
     file_paths = {"csv": [], "jsonl": [], "json": []}
 
@@ -65,8 +62,9 @@ def collect_file_paths(directory_path):
     return file_paths
 
 
-directory_path = "data"
+directory_path = "../data"
 file_paths = collect_file_paths(directory_path)
+
 file_variable_mapping = {
     "advpromptset_final_10k.jsonl": "advprompt",
     "prompts.jsonl": "real_toxicity_prompts",
@@ -110,7 +108,7 @@ def clean_text_for_llama(text):
 
 
 # Create database holding all red team prompts
-conn = sqlite3.connect("./data/red_team_prompt_database.db")
+conn = sqlite3.connect("../data/red_team_prompt_database.db")
 cursor = conn.cursor()
 cursor.execute(
     """
@@ -154,4 +152,12 @@ for i in cot_bias:
     )
 
 conn.commit()
+
+cursor.execute("SELECT * FROM prompts")
+results = cursor.fetchall()
+for idx, row in enumerate(results):
+    print(row)
+    if idx >= 10:
+        break
+
 conn.close()

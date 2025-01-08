@@ -14,7 +14,7 @@ source_patterns = {
 
 def copy_files():
     destination_base = "./"
-    os.chdir("./data")
+    os.chdir("../data")
     for dataset, pattern in source_patterns.items():
         destination_dir = os.path.join(destination_base, dataset)
         os.makedirs(dataset, exist_ok=True)
