@@ -66,7 +66,7 @@ class APIModel(WrapperModel):
         output = self.postprocess(responses=response)
         return output
 
-    def _model_predict(self, inputs) -> List[str]:
+    def _model_predict(self, inputs: List[str]) -> List[str]:
         """
         Helper function for obtaining generated response from input prompts.
 
