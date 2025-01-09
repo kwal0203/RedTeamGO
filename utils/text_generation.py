@@ -8,6 +8,7 @@ def generate_text(
     sample: bool,
     top_p: float,
     top_k: float,
+    local: bool,
 ):
     """
     Helper function that obtains text from LLM. This function is used to generate
@@ -21,4 +22,9 @@ def generate_text(
         top_k=top_k,
         pad_token_id=red_lm.tokenizer.eos_token_id,
     )
-    return red_lm.tokenizer.decode(response[0][prompt.input_ids[0].shape[0] :]).strip()
+
+    if local:
+        return red_lm.tokenizer.decode(
+            response[0][prompt.input_ids[0].shape[0] :]
+        ).strip()
+    return response

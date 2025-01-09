@@ -1,4 +1,4 @@
-from models import ToxicityEvaluationModel
+from utils.models import ToxicityEvaluationModel
 from typing import List, Any, Dict
 
 import json

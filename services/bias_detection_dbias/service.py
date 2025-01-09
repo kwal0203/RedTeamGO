@@ -1,5 +1,5 @@
 from src.bias_detection import detect_bias
-from models import DetectionBatch
+from utils.models import DetectionBatch
 from typing import Dict, Any
 
 

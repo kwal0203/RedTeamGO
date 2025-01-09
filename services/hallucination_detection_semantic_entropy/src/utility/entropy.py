@@ -1,4 +1,4 @@
-from utils import response_generator
+from utils.utils import response_generator
 from typing import Any, Dict
 
 
@@ -28,7 +28,7 @@ def get_generations(
 def semantic_entropy(
     entailment_model: str, model: Any, prompt: str, session_state: Any
 ) -> Dict:
-    from models import EntailmentDeberta
+    from utils.models import EntailmentDeberta
     from services.semantic_entropy import get_semantic_ids
 
     # from semantic_entropy import cluster_assignment_entropy

@@ -1,44 +1,53 @@
 from services.model_wrappers.huggingface_model import HuggingFaceModel
-from src.services.automated_q_and_a import (
-    evaluate_zero_shot_questions,
-    evaluate_few_shot_questions,
+from services.model_wrappers.api_model import APIModel
+from typing import Dict, Any, Optional, List
+from src.prompt_sampling import get_random_samples
+from src.response_evaluation import (
+    evaluate_inputs,
 )
-from models import DetectionBatch
-from typing import Dict, Any
+from src.prompt_generation import (
+    generate_zero_shot_inputs,
+    generate_few_shot_inputs,
+)
+
+import os
 
 
-def automated_toxicity_detection_service(args: DetectionBatch) -> Dict[str, Any]:
-    """
-    Automated vulnerability discovery service based on technique introduced in:
+def toxicity_detection_service(
+    model: str,
+    local: bool,
+    num_samples: int,
+    prompts: Optional[str] = None,
+    topics: Optional[List[str]] = None,
+) -> Dict[str, Any]:
 
-    Ethan Perez, Saffron Huang, Francis Song, Trevor Cai, Roman Ring, John
-    Aslanides, Amelia Glaese, Nat McAleese, and Geoffrey Irving. 2022. Red Teaming
-    Language Models with Language Models. In Proceedings of the 2022 Conference on
-    Empirical Methods in Natural Language Processing, pages 3419-3448, Abu Dhabi,
-    United Arab Emirates. Association for Computational Linguistics.
-    """
-
-    model = args.model
-    num_samples = args.num_samples
-    prompts = args.prompts
-    topics = args.topics
-
-    if topics[0] != "":
-        # Generate zero shot questions from user provided topics
-        print("ZERO SHOT QUESTION GENERATION NOT IMPLEMENTED YET")
-    elif prompts != "":
-        # Get zero shot questions from database
-        print("ZERO SHOT QUESTION RETRIEVAL FROM DATABASE NOT IMPLEMENTED YET")
+    if local:
+        red_lm = HuggingFaceModel(name=model)
     else:
-        print("ERROR: ZERO SHOT QUESTIONS MUST BE GENERATED OR COME FROM DATABASE")
+        red_lm = APIModel(name=model)
+
+    if prompts:
+        print("----- automated_toxicity_detection_service: database")
+        # Grab num_samples random entries from the database
+        # TODO: Turn the database into a service served through API, remove
+        #       hard coded dp_path.
+        input = get_random_samples(
+            db_path=f"{os.getcwd()}/../../data/red_team_prompt_database.db",
+            num_samples_per_dataset=num_samples,
+        )
+    elif topics:
+        # Generate LLM inputs from user provided topics
+        print("----- automated_toxicity_detection_service: generated NOT_IMPLEMENTED")
+        return {"automated_toxicity_result": {}}
+    else:
+        print("ERROR: INPUTS MUST BE GENERATED OR COME FROM DATABASE")
         return {"automated_toxicity_result": {}}
 
-    red_lm = HuggingFaceModel(name=model)
-    result_json = evaluate_zero_shot_questions(red_lm=red_lm, num_samples=num_samples)
+    result_json = evaluate_inputs(red_lm=red_lm, inputs=input)
 
     # # Add in second layer of toxicity detection later
-    # result_json = evaluate_few_shot_questions(
+    # result_json = evaluate_questions(
     #     red_lm=red_lm, num_test_cases=num_samples, first_result=result
     # )
 
-    return {"automated_toxicity_result": result_json}
+    return {"toxicity_evaluation": result_json}
