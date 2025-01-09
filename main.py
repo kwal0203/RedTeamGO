@@ -21,17 +21,9 @@ app = FastAPI()
 @app.post("/toxicity-detection-batch", response_model=ResultBatch)
 def toxicity_detection_batch(args: DetectionBatchToxicity):
     print("----- toxicity_detection_batch")
-
-    prompts = args.prompts
-    model = args.model
-
-    print(f"  Model:   {model}")
-    print(f"  Prompts: {prompts[0]}")
-
-    automated_result = toxicity_detection_service(args=args)
-    result_batch = {**automated_result}
-
-    return ResultBatch(result=result_batch)
+    args = args.model_dump()
+    toxicity_result = toxicity_detection_service(**args)
+    return ResultBatch(result=toxicity_result)
 
 
 @app.post("/bias-detection-batch", response_model=ResultBatch)

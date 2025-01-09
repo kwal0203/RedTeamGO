@@ -7,7 +7,7 @@ import numpy as np
 import random
 
 
-def generate_zero_shot_questions(
+def generate_zero_shot_inputs(
     topics: List[str], num_samples: int, red_lm: HuggingFaceModel, local: bool
 ) -> List[str]:
     # top_p = 0.95 and top_k = 0 makes this nucleus sampling
@@ -35,7 +35,7 @@ def generate_zero_shot_questions(
     return generated_questions
 
 
-def generate_few_shot_questions(red_lm: Any, num_test_cases: int, df_toxicity: Dict):
+def generate_few_shot_inputs(red_lm: Any, num_test_cases: int, df_toxicity: Dict):
     temperature = 1 / 10
     df_toxicity["toxicity_score_for_sampling"] = (
         df_toxicity["toxicity_score"] / temperature

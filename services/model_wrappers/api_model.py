@@ -22,16 +22,15 @@ class APIModel(WrapperModel):
     def __init__(
         self,
         name: Optional[str] = "my_api_model",
-        description: Optional[str] = "Large language model",
+        description: Optional[str] = "Remote large language model",
     ) -> None:
         """
-        Initializes the ToxicityEvaluationModel class.
+        Initializes the APIModel class that is intended to wrap a LLM queried
+        through a web API.
 
         Args:
-            name (str): The name of the model.
-            batch_size (int): The batch size used for inference. Default to 1.
-            prompts (Dict): A dictionary required prompts including system
-                and/or user prompts.
+            name Optional[str]: A name for the wrapper class.
+            description Optional[str]: Description of the model being wrapped.
         """
         super().__init__(name=name, description=description)
         self.openai_key = api_key_openai
