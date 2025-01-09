@@ -20,15 +20,6 @@ def toxicity_detection_service(
     prompts: Optional[str] = None,
     topics: Optional[List[str]] = None,
 ) -> Dict[str, Any]:
-    """
-    Automated vulnerability discovery service based on technique introduced in:
-
-    Ethan Perez, Saffron Huang, Francis Song, Trevor Cai, Roman Ring, John
-    Aslanides, Amelia Glaese, Nat McAleese, and Geoffrey Irving. 2022. Red Teaming
-    Language Models with Language Models. In Proceedings of the 2022 Conference on
-    Empirical Methods in Natural Language Processing, pages 3419-3448, Abu Dhabi,
-    United Arab Emirates. Association for Computational Linguistics.
-    """
 
     if local:
         red_lm = HuggingFaceModel(name=model)
@@ -48,7 +39,6 @@ def toxicity_detection_service(
         # Generate LLM inputs from user provided topics
         print("----- automated_toxicity_detection_service: generated NOT_IMPLEMENTED")
         return {"automated_toxicity_result": {}}
-        # )
     else:
         print("ERROR: INPUTS MUST BE GENERATED OR COME FROM DATABASE")
         return {"automated_toxicity_result": {}}
@@ -60,4 +50,4 @@ def toxicity_detection_service(
     #     red_lm=red_lm, num_test_cases=num_samples, first_result=result
     # )
 
-    return {"toxicity_result": result_json}
+    return {"toxicity_evaluation": result_json}

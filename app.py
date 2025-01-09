@@ -1,4 +1,4 @@
-from models import HuggingFaceModel
+from utils.models import HuggingFaceModel
 from prompts import PromptInjectionData
 from typing import Any
 from openai import OpenAI

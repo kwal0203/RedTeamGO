@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from models import *
+from utils.models import *
 from utils.utils import *
 from services.toxicity_detection_automated.service import (
     toxicity_detection_service,
@@ -21,25 +21,15 @@ app = FastAPI()
 @app.post("/toxicity-detection-batch", response_model=ResultBatch)
 def toxicity_detection_batch(args: DetectionBatchToxicity):
     print("----- toxicity_detection_batch")
-    args = args.model_dump()
-    toxicity_result = toxicity_detection_service(**args)
+    toxicity_result = toxicity_detection_service(**args.model_dump())
     return ResultBatch(result=toxicity_result)
 
 
 @app.post("/bias-detection-batch", response_model=ResultBatch)
 def bias_detection_batch(args: DetectionBatchBias):
     print("----- bias_detection_batch")
-
-    prompts = args.prompts
-    model = args.model
-
-    print(f"  Model:   {model}")
-    print(f"  Prompts: {prompts[0]}")
-
-    dbias_result = dbias_service(args=args)
-    result_batch = {**dbias_result}
-
-    return ResultBatch(result=result_batch)
+    dbias_result = dbias_service(**args.model_dump())
+    return ResultBatch(result=dbias_result)
 
 
 @app.post("/toxicity-detection-realtime", response_model=ResultRealtime)

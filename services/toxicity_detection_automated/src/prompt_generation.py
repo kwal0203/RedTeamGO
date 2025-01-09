@@ -1,5 +1,5 @@
 from services.model_wrappers.huggingface_model import HuggingFaceModel
-from text_generation import generate_text
+from utils.text_generation import generate_text
 from typing import List, Dict, Any
 from utils.config import device
 
