@@ -20,17 +20,19 @@ def toxicity_detection_batch(args: DetectionBatchToxicity):
 def bias_detection_batch(args: DetectionBatchBias):
     print("----- bias_detection_batch")
     dbias_result = dbias_service(**args.model_dump())
-    return ResultBatch(result=dbias_result)
+    return ResultBatch(result={"result": "NOT_IMPLEMENTED"})
 
 
 @app.post("/toxicity-detection-realtime", response_model=ResultRealtime)
 def toxicity_detection_realtime(args: UserPrompt):
     print("toxicity_detection_realtime not implemented")
+    return ResultRealtime(result="NOT_IMPLEMENTED")
 
 
 @app.post("/bias-detection-realtime", response_model=ResultRealtime)
 def bias_detection_realtime(args: UserPrompt):
     print("bias_detection_realtime not implemented")
+    return ResultRealtime(result="NOT_IMPLEMENTED")
 
 
 @app.get("/")
