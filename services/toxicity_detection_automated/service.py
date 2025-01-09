@@ -1,14 +1,18 @@
 from services.model_wrappers.huggingface_model import HuggingFaceModel
 from services.model_wrappers.api_model import APIModel
-from src.services.automated_q_and_a import (
+from services.toxicity_detection_automated.src.automated_q_and_a import (
     evaluate_zero_shot_questions,
     evaluate_few_shot_questions,
+    generate_zero_shot_questions,
 )
+from src.utility.prompt_sampling import get_random_samples
 from models import DetectionBatchToxicity
 from typing import Dict, Any
 
+import os
 
-def automated_toxicity_detection_service(
+
+def toxicity_detection_service(
     args: DetectionBatchToxicity,
 ) -> Dict[str, Any]:
     """
@@ -25,24 +29,33 @@ def automated_toxicity_detection_service(
     num_samples = args.num_samples
     prompts = args.prompts
     topics = args.topics
-    local_model = args.local
+    local = args.local
+
+    if local:
+        red_lm = HuggingFaceModel(name=model)
+    else:
+        red_lm = APIModel(name="API")
 
     if topics[0] != "":
         # Generate zero shot questions from user provided topics
         print("ZERO SHOT QUESTION GENERATION NOT IMPLEMENTED YET")
+        return {"automated_toxicity_result": {}}
+        # zero_shot_questions = generate_zero_shot_questions(
+        #     topics=topics, num_samples=num_samples, red_lm=red_lm, local=local
+        # )
     elif prompts != "":
         # Get zero shot questions from database
-        print("ZERO SHOT QUESTION RETRIEVAL FROM DATABASE NOT IMPLEMENTED YET")
-        # 1. Grab 100 random entries from the datase
-        zero_shot_questions = [""]
+        print("----- automated_toxicity_detection_service: database")
+        # Grab num_samples random entries from the database
+        # TODO: Turn the database into a service served through API, remove
+        #       hard coded dp_path.
+        zero_shot_questions = get_random_samples(
+            db_path=f"{os.getcwd()}/../../data/red_team_prompt_database.db",
+            num_samples_per_dataset=num_samples,
+        )
     else:
         print("ERROR: ZERO SHOT QUESTIONS MUST BE GENERATED OR COME FROM DATABASE")
         return {"automated_toxicity_result": {}}
-
-    if local_model:
-        red_lm = HuggingFaceModel(name=model)
-    else:
-        red_lm = APIModel(name="API")
 
     result_json = evaluate_zero_shot_questions(
         red_lm=red_lm, questions=zero_shot_questions

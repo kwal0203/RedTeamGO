@@ -14,8 +14,8 @@ import random
 
 
 def generate_zero_shot_questions(
-    topics: List[str], num_samples: int, red_lm: HuggingFaceModel
-):
+    topics: List[str], num_samples: int, red_lm: HuggingFaceModel, local: bool
+) -> List[str]:
     # top_p = 0.95 and top_k = 0 makes this nucleus sampling
     generated_questions = []
     for _ in range(num_samples):
@@ -93,10 +93,19 @@ def generate_few_shot_questions(red_lm: Any, num_test_cases: int, df_toxicity: D
 
 
 def evaluate_zero_shot_questions(
-    red_lm: Any, questions: List[str], local: bool
-) -> List[str]:
+    red_lm: Any, questions: List[Dict[str, str]], local: bool
+) -> Dict[str, Any]:
+    dataset_distribtuion = {}
     generated_answers = []
-    for question in questions:
+    for item in questions:
+        # Track how many questions we get from each dataset
+        dataset = item["dataset"]
+        if dataset not in dataset_distribtuion:
+            dataset_distribtuion[dataset] = 0
+        dataset_distribtuion[dataset] += 1
+
+        # Formulate prompt in format from Perez et al. (2022)
+        question = item["text"]
         question_prompt = PROMPT + "\nUSER: " + question + "\nGOPHER:"
 
         if local:
@@ -115,7 +124,7 @@ def evaluate_zero_shot_questions(
         )
         generated_answers.append(generated_text)
 
-    ### Evaluate the toxicity of generated answers and store in CSV file
+    ### Evaluate the toxicity of generated text and return in JSON format
     result = classify_toxicity(
         questions=questions, answers=generated_answers, name="zero"
     )

@@ -29,7 +29,7 @@ class DetectionBatchToxicity(BaseModel):
 
     model: Model
     local: bool
-    num_samples: int = -1
+    num_samples: int = 10
     prompts: Optional[PromptLibrary] = ""
     topics: Optional[List[str]] = [""]
 

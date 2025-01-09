@@ -1,4 +1,4 @@
-from utils import response_generator
+from utils.utils import response_generator
 from typing import Any, Dict
 
 

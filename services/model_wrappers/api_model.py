@@ -1,5 +1,6 @@
 from services.model_wrappers.base_model import WrapperModel
 from typing import Optional, Dict, List
+from utils.config import api_key_openai
 
 
 class APIModel(WrapperModel):
@@ -7,9 +8,9 @@ class APIModel(WrapperModel):
     This class provides a wrapper for models that are queried through an API.
 
     Attributes:
-        name (str): TODO.
-        batch_size (int): TODO.
-        prompts (Dict): TODO.
+        name (Optional[str]): TODO.
+        decription (Optional[str]): TODO.
+        openai_key (str): TODO.
 
     Methods:
         preprocess: TODO.
@@ -20,9 +21,8 @@ class APIModel(WrapperModel):
 
     def __init__(
         self,
-        name: Optional[str] = None,
-        batch_size: Optional[int] = 1,
-        prompts: Dict = None,
+        name: Optional[str] = "my_api_model",
+        description: Optional[str] = "Large language model",
     ) -> None:
         """
         Initializes the ToxicityEvaluationModel class.
@@ -33,13 +33,8 @@ class APIModel(WrapperModel):
             prompts (Dict): A dictionary required prompts including system
                 and/or user prompts.
         """
-        super().__init__(
-            model=name,
-            name=name,
-        )
-
-        self.batch_size = batch_size
-        self.prompts = prompts
+        super().__init__(name=name, description=description)
+        self.openai_key = api_key_openai
 
     def preprocess(self, data: List[Dict]) -> List[str]:
         """
@@ -50,15 +45,27 @@ class APIModel(WrapperModel):
         """
         return data
 
+    def postprocess(self, response):
+        """
+        Postprocessing of generated responses.
+
+        Args:
+            response (List[str]): TODO.
+        """
+        return response
+
     def model_predict(self, data: List[str]) -> List[str]:
         """
-        Obtain generated responses after inputting prompts.
+        Obtain generated responses after inputting prompts. Perform input and
+        output processing if required.
 
         Args:
             data (List[str]): TODO.
         """
-        inputs = self.preprocess(data=data)
-        return self._model_predict(inputs=inputs)
+        input = self.preprocess(data=data)
+        response = self._model_predict(inputs=input)
+        output = self.postprocess(responses=response)
+        return output
 
     def _model_predict(self, inputs) -> List[str]:
         """
@@ -67,16 +74,8 @@ class APIModel(WrapperModel):
         Args:
             inputs (List[int]): TODO.
         """
+        # TODO: set this up so it queries the provided FastAPI endpoint
         responses = []
         for input in inputs:
             responses.append(self.model(input))
-        return responses
-
-    def postprocess(self, responses):
-        """
-        Postprocessing of generated responses.
-
-        Args:
-            responses (List[str]): TODO.
-        """
         return responses

@@ -1,18 +1,19 @@
 from fastapi import FastAPI
 from models import *
-from utils import *
+from utils.utils import *
 from services.toxicity_detection_automated.service import (
     automated_toxicity_detection_service,
 )
 from services.bias_detection_dbias.service import dbias_service
 
-# Replace with LiteLLM
-from dotenv import load_dotenv
-import os
+# # Replace with LiteLLM
+# from dotenv import load_dotenv
+# import os
 
-load_dotenv()
+# load_dotenv()
 
-API_KEY = os.getenv("OPENAI_API_KEY")
+# API_KEY = os.getenv("OPENAI_API_KEY")
+# DEVICE = os.getenv("DEVICE")
 
 app = FastAPI()
 
@@ -27,7 +28,7 @@ def toxicity_detection_batch(args: DetectionBatchToxicity):
     print(f"  Model:   {model}")
     print(f"  Prompts: {prompts[0]}")
 
-    automated_result = automated_toxicity_detection_service(args=args)
+    automated_result = toxicity_detection_service(args=args)
     result_batch = {**automated_result}
 
     return ResultBatch(result=result_batch)

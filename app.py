@@ -3,7 +3,7 @@ from prompts import PromptInjectionData
 from typing import Any
 from openai import OpenAI
 
-from utils import (
+from utils.utils import (
     auto_hijack,
     response_generator,
     hijack_log,
