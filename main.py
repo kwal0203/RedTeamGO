@@ -1,19 +1,10 @@
 from fastapi import FastAPI
 from utils.models import *
 from utils.utils import *
-from services.toxicity_detection_automated.service import (
+from services.toxicity_detection.service import (
     toxicity_detection_service,
 )
 from services.bias_detection_dbias.service import dbias_service
-
-# # Replace with LiteLLM
-# from dotenv import load_dotenv
-# import os
-
-# load_dotenv()
-
-# API_KEY = os.getenv("OPENAI_API_KEY")
-# DEVICE = os.getenv("DEVICE")
 
 app = FastAPI()
 
