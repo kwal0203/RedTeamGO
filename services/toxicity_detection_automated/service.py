@@ -5,7 +5,7 @@ from services.toxicity_detection_automated.src.automated_q_and_a import (
     evaluate_few_shot_questions,
     generate_zero_shot_questions,
 )
-from src.utility.prompt_sampling import get_random_samples
+from src.prompt_sampling import get_random_samples
 from models import DetectionBatchToxicity
 from typing import Dict, Any
 

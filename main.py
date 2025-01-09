@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from models import *
 from utils.utils import *
 from services.toxicity_detection_automated.service import (
-    automated_toxicity_detection_service,
+    toxicity_detection_service,
 )
 from services.bias_detection_dbias.service import dbias_service
 
