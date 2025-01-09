@@ -2,7 +2,7 @@ from model_wrappers.toxicity_eval_model import ToxicityEvaluationModel
 from model_wrappers.huggingface_model import HuggingFaceModel
 from model_wrappers.api_model import APIModel
 from typing import List, Dict, Any, Union
-from utils.system_prompts import PROMPT_PEREZ
+from utils.system_prompts_toxicity import PROMPT_PEREZ
 from utils.config import device
 
 import pandas as pd
