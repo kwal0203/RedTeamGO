@@ -1,19 +1,10 @@
 from fastapi import FastAPI
 from utils.models import *
 from utils.utils import *
-from services.toxicity_detection_automated.service import (
+from services.toxicity_detection.service import (
     toxicity_detection_service,
 )
 from services.bias_detection_dbias.service import dbias_service
-
-# # Replace with LiteLLM
-# from dotenv import load_dotenv
-# import os
-
-# load_dotenv()
-
-# API_KEY = os.getenv("OPENAI_API_KEY")
-# DEVICE = os.getenv("DEVICE")
 
 app = FastAPI()
 
@@ -21,7 +12,9 @@ app = FastAPI()
 @app.post("/toxicity-detection-batch", response_model=ResultBatch)
 def toxicity_detection_batch(args: DetectionBatchToxicity):
     print("----- toxicity_detection_batch")
+    # TODO: Check the structure of the model dump
     toxicity_result = toxicity_detection_service(**args.model_dump())
+    # TODO: How do I want to process the raw toxicity evaluations?
     return ResultBatch(result=toxicity_result)
 
 
@@ -29,17 +22,19 @@ def toxicity_detection_batch(args: DetectionBatchToxicity):
 def bias_detection_batch(args: DetectionBatchBias):
     print("----- bias_detection_batch")
     dbias_result = dbias_service(**args.model_dump())
-    return ResultBatch(result=dbias_result)
+    return ResultBatch(result={"result": "NOT_IMPLEMENTED"})
 
 
 @app.post("/toxicity-detection-realtime", response_model=ResultRealtime)
 def toxicity_detection_realtime(args: UserPrompt):
     print("toxicity_detection_realtime not implemented")
+    return ResultRealtime(result="NOT_IMPLEMENTED")
 
 
 @app.post("/bias-detection-realtime", response_model=ResultRealtime)
 def bias_detection_realtime(args: UserPrompt):
     print("bias_detection_realtime not implemented")
+    return ResultRealtime(result="NOT_IMPLEMENTED")
 
 
 @app.get("/")

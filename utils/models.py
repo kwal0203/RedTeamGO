@@ -19,7 +19,8 @@ class ResultRealtime(BaseModel):
 
 
 class Model(BaseModel):
-    model: str
+    name: str
+    description: str
 
 
 class DetectionBatchToxicity(BaseModel):
@@ -28,10 +29,10 @@ class DetectionBatchToxicity(BaseModel):
     """
 
     model: Model
-    local: bool
-    num_samples: int = 10
-    prompts: Optional[PromptLibrary] = ""
-    topics: Optional[List[str]] = [""]
+    num_samples: int
+    random: bool = True
+    prompts: Optional[PromptLibrary] = None
+    topics: Optional[List[str]] = None
 
 
 class DetectionBatchBias(BaseModel):

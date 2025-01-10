@@ -1,5 +1,5 @@
 from utils.models import HuggingFaceModel
-from prompts import PromptInjectionData
+from frontend.prompts import PromptInjectionData
 from typing import Any
 from openai import OpenAI
 
@@ -10,7 +10,7 @@ from utils.utils import (
     extract_text_from_pdf,
 )
 
-from html_snippets import *
+from frontend.html_snippets import *
 
 from dotenv import load_dotenv
 import os
