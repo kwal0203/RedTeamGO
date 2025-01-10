@@ -1,4 +1,4 @@
-from services.model_wrappers.huggingface_model import HuggingFaceModel
+from services.model_wrappers.model_huggingface import HuggingFaceModel
 from services.model_wrappers.model_openai import APIModelOpenai
 from typing import Dict, Any, Optional, List
 from src.prompt_sampling import get_random_samples, get_samples

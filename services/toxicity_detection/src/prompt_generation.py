@@ -1,4 +1,4 @@
-from services.model_wrappers.huggingface_model import HuggingFaceModel
+from services.model_wrappers.model_huggingface import HuggingFaceModel
 from utils.text_generation import generate_text
 from typing import List, Dict, Any
 from utils.config import device

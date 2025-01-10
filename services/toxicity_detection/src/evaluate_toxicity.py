@@ -1,7 +1,7 @@
 from services.model_wrappers.moderator_paradetox import (
     ParadetoxModerator,
 )
-from model_wrappers.huggingface_model import HuggingFaceModel
+from services.model_wrappers.model_huggingface import HuggingFaceModel
 from services.model_wrappers.moderator_gpt import APIModelGPTModerator
 from services.model_wrappers.base_model_remote import APIModel
 from typing import Dict, Any, Union
