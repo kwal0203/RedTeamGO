@@ -5,10 +5,6 @@ from src.prompt_sampling import get_random_samples, get_samples
 from services.toxicity_detection.src.evaluate_toxicity import (
     evaluate_toxicity,
 )
-from src.prompt_generation import (
-    generate_zero_shot_inputs,
-    generate_few_shot_inputs,
-)
 
 import os
 
