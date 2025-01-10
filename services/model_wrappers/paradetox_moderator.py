@@ -1,16 +1,23 @@
 from services.model_wrappers.base_model import WrapperModel
-from typing import Optional, List
+from typing import Optional, Dict, List
 from transformers import (
-    AutoModelForCausalLM,
-    AutoTokenizer,
+    RobertaTokenizer,
+    RobertaForSequenceClassification,
 )
 from utils.config import device
 
+import numpy as np
 
-class HuggingFaceModel(WrapperModel):
+
+class ParadetoxModerator(WrapperModel):
     """
-    This class provides a wrapper for HuggingFace models from the
-    'transformers' library.
+    This class provides a wrapper for the model from:
+
+    Varvara Logacheva, Daryna Dementieva, Sergey Ustyantsev, Daniil Moskovskiy,
+    David Dale, Irina Krotova, Nikita Semenov, and Alexander Panchenko. 2022.
+    ParaDetox: Detoxification with Parallel Data. In Proceedings of the 60th
+    Annual Meeting of the Association for Computational Linguistics.
+    Association for Computational Linguistics.
 
     Attributes:
         name (Optional[str]): TODO.
@@ -27,11 +34,11 @@ class HuggingFaceModel(WrapperModel):
 
     def __init__(
         self,
-        name: Optional[str] = "my_huggingface_model",
-        description: Optional[str] = "Large language model",
+        name: Optional[str] = "my_paradetox_model",
+        description: Optional[str] = "Local large language model",
     ) -> None:
         """
-        Initializes the HuggingFaceModel class.
+        Initializes the ParaDetox wrapper class.
 
         Args:
             name Optional[str]: A name for the wrapper class.
@@ -39,8 +46,8 @@ class HuggingFaceModel(WrapperModel):
         """
         super().__init__(name=name, description=description)
 
-        self.model = AutoModelForCausalLM.from_pretrained(name)
-        self.tokenizer = AutoTokenizer.from_pretrained(name)
+        self.model = RobertaForSequenceClassification.from_pretrained(name)
+        self.tokenizer = RobertaTokenizer.from_pretrained(name)
         self.model.to(device)
 
     def preprocess(self, data: List[str]) -> List[str]:
@@ -50,11 +57,7 @@ class HuggingFaceModel(WrapperModel):
         Args:
             data (List[str]): TODO.
         """
-        tokens = [
-            self.tokenizer(i + self.tokenizer.eos_token, return_tensors="pt").to(device)
-            for i in data
-        ]
-        return tokens
+        return self.tokenizer.encode(data, return_tensors="pt")
 
     def postprocess(self, generated_text):
         """
@@ -73,6 +76,7 @@ class HuggingFaceModel(WrapperModel):
         Args:
             data (List[str]): TODO.
         """
+
         input = self.preprocess(data=data)
         response = self._model_predict(inputs=input)
         output = self.postprocess(responses=response)
@@ -85,17 +89,18 @@ class HuggingFaceModel(WrapperModel):
         Args:
             inputs (List[int]): TODO.
         """
-        responses = []
-        for input in inputs:
-            outputs = self.model.generate(
-                input.input_ids,
-                max_length=500,
-                pad_token_id=self.tokenizer.eos_token_id,
-                num_return_sequences=1,
-            )
-            generated_text = self.tokenizer.decode(
-                outputs[0], skip_special_tokens=False
-            )
-            responses.append(generated_text)
+        response_evaluation = self.model(data=inputs)
 
-        return responses
+        def softmax(logits):
+            exp_logits = np.exp(logits)
+            return exp_logits / np.sum(exp_logits, axis=-1, keepdims=True)
+
+        # Use tensor.detach().numpy() instead.
+        toxicity_probability = softmax(
+            [
+                response_evaluation.logits[0][0].detach().numpy(),
+                response_evaluation.logits[0][1].detach().numpy(),
+            ]
+        )
+
+        return toxicity_probability[1]

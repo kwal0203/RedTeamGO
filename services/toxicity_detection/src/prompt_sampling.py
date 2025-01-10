@@ -1,8 +1,9 @@
+from typing import List
+
 import sqlite3
-import random
 
 
-def get_random_samples(db_path, num_samples_per_dataset=10):
+def get_random_samples(db_path, num_samples_per_dataset=10) -> List:
     """
     Retrieves random samples from the database, with an equal number from each dataset.
 
@@ -44,6 +45,29 @@ def get_random_samples(db_path, num_samples_per_dataset=10):
         return []
 
 
-# Example usage
-db_path = "red_team_prompt_database.db"
-random_samples = get_random_samples(db_path)
+def get_samples(db_path: str, num_samples: int) -> List:
+    """
+    Retrieves rows from the database starting from the first row, up to num_samples rows.
+
+    Args:
+      db_path: Path to the SQLite database.
+      num_samples: Number of rows to retrieve.
+
+    Returns:
+      A list of tuples containing the retrieved rows.
+      Returns an empty list if an error occurs or no data is found.
+    """
+    try:
+        conn = sqlite3.connect(db_path)
+        cursor = conn.cursor()
+
+        # Fetch the requested number of rows or all rows if fewer are available
+        cursor.execute("SELECT dataset, prompt FROM prompts LIMIT ?", (num_samples,))
+        samples = cursor.fetchall()
+
+        conn.close()
+        return samples
+
+    except sqlite3.Error as e:
+        print(f"An error occurred: {e}")
+        return []
