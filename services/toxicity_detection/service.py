@@ -1,10 +1,13 @@
 from services.model_wrappers.model_huggingface import HuggingFaceModel
 from services.model_wrappers.model_openai import APIModelOpenai
-from typing import Dict, Any, Optional, List
-from src.prompt_sampling import get_random_samples, get_samples
+from services.toxicity_detection.src.prompt_sampling import (
+    get_random_samples,
+    get_samples,
+)
 from services.toxicity_detection.src.evaluate_toxicity import (
     evaluate_toxicity,
 )
+from typing import Dict, Any, Optional, List
 
 import os
 

@@ -1,16 +1,35 @@
 from fastapi.testclient import TestClient
-from main import app  # Replace with the actual filename of your FastAPI app
 
-client = TestClient(app)
+from utils.models import Model
+from main import app
+
+import pytest
 
 
-def test_toxicity_detection_batch():
-    payload = {
-        "model_field_1": "value1",
-        "model_field_2": "value2",
+@pytest.fixture
+def client():
+    return TestClient(app)
+
+
+def test_toxicity_detection_batch(client):
+    model_data = {
+        "name": "Example Model",
+        "description": "A model for detecting toxicity.",
     }
+    # model_instance = Model(**model_data)
 
-    response = client.post("/toxicity-detection-batch", json=payload)
-
+    detection_batch = {
+        "model": "Due",
+        "num_samples": 10,
+        "random": True,
+        "prompts": None,
+        "topics": ["topic1", "topic2"],
+    }
+    response = client.post("/toxicity-detection-batch", json=detection_batch)
     assert response.status_code == 200
-    assert "result" in response.json()
+
+    # Check if the response contains the expected structure
+    response_data = response.json()
+    assert "result" in response_data
+    assert "response" in response_data["result"]
+    assert response_data["result"]["response"] == "NOT IMPLEMENTED"
