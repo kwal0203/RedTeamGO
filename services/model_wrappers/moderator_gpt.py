@@ -1,4 +1,4 @@
-from model_wrappers.api_model import APIModel
+from services.model_wrappers.base_model_remote import APIModel
 from typing import List, Optional
 
 import openai

@@ -1,5 +1,5 @@
 from services.model_wrappers.huggingface_model import HuggingFaceModel
-from services.model_wrappers.api_model_openai import APIModelOpenai
+from services.model_wrappers.model_openai import APIModelOpenai
 from typing import Dict, Any, Optional, List
 from src.prompt_sampling import get_random_samples, get_samples
 from services.toxicity_detection.src.evaluate_toxicity import (

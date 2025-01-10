@@ -1,13 +1,12 @@
-from services.model_wrappers.paradetox_moderator import (
+from services.model_wrappers.moderator_paradetox import (
     ParadetoxModerator,
 )
 from model_wrappers.huggingface_model import HuggingFaceModel
-from model_wrappers.api_model_gpt_moderator import APIModelGPTModerator
-from model_wrappers.api_model import APIModel
+from services.model_wrappers.moderator_gpt import APIModelGPTModerator
+from services.model_wrappers.base_model_remote import APIModel
 from typing import Dict, Any, Union
 from utils.system_prompts_toxicity import PROMPT_PEREZ
 
-import numpy as np
 import json
 
 
@@ -67,8 +66,11 @@ def evaluate_toxicity(
 
 
 def build_eval_models():
-    PATH = "/scratch3/wal740/eval_models/roberta_toxicity_classifier"
-    paradetox_moderator = ParadetoxModerator(PATH)
+    paradetox_moderator = ParadetoxModerator(
+        path="/scratch3/wal740/eval_models/roberta_toxicity_classifier",
+        name="paradetox_moderator",
+        description="Calls a local model for toxicity detection",
+    )
     gpt_moderator = APIModelGPTModerator(
         name="gpt_moderator", description="Calls OpenAI moderator endpoint"
     )

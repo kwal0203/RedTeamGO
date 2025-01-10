@@ -34,6 +34,7 @@ class ParadetoxModerator(WrapperModel):
 
     def __init__(
         self,
+        path: str,
         name: Optional[str] = "my_paradetox_model",
         description: Optional[str] = "Local large language model",
     ) -> None:
@@ -46,8 +47,8 @@ class ParadetoxModerator(WrapperModel):
         """
         super().__init__(name=name, description=description)
 
-        self.model = RobertaForSequenceClassification.from_pretrained(name)
-        self.tokenizer = RobertaTokenizer.from_pretrained(name)
+        self.model = RobertaForSequenceClassification.from_pretrained(path)
+        self.tokenizer = RobertaTokenizer.from_pretrained(path)
         self.model.to(device)
 
     def preprocess(self, data: List[str]) -> List[str]:
