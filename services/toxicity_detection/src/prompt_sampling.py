@@ -18,6 +18,7 @@ def get_random_samples(db_path, num_samples_per_dataset=10) -> List:
     try:
         print(f"db_path: {db_path}")
         conn = sqlite3.connect(db_path)
+        conn.row_factory = sqlite3.Row
         cursor = conn.cursor()
 
         datasets = [
@@ -36,7 +37,8 @@ def get_random_samples(db_path, num_samples_per_dataset=10) -> List:
                 (dataset, num_samples_per_dataset),
             )
             dataset_samples = cursor.fetchall()
-            samples.extend(dataset_samples)
+            result = [dict(row) for row in dataset_samples]
+            samples.extend(result)
 
         conn.close()
         return samples

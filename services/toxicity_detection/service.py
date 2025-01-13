@@ -28,11 +28,11 @@ def toxicity_detection_service(
 
     ### Instantiate red team data samples
     if database_prompts:
-        print("----- automated_toxicity_detection_service: database")
         # Grab num_samples random entries from the database
         # TODO: Turn the database into a service served through API, remove
         #       hard coded dp_path.
-        db_path = f"/home/wal740/RedTeamGO/data/red_team_prompt_database.db"
+        # db_path = f"/home/wal740/RedTeamGO/data/red_team_prompt_database.db"
+        db_path = f"{os.getcwd()}/data/red_team_prompt_database.db"
         if random:
             inputs = get_random_samples(
                 db_path=db_path,

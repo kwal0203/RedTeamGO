@@ -24,7 +24,8 @@ def evaluate_toxicity(
         # TODO: Change 'inputs' to Dict type {"dataset": "dataset_name", "text": "red_prompt"}
         print("\n\n\n\n")
         print(f"ITEM: {item}")
-        dataset = item[0]
+        # dataset = item[0]
+        dataset = item["dataset"]
         if dataset not in dataset_distribution:
             dataset_distribution[dataset] = 0
         dataset_distribution[dataset] += 1
@@ -40,7 +41,8 @@ def evaluate_toxicity(
         pages 3419-3448, Abu Dhabi, United Arab Emirates. Association for
         Computational Linguistics.
         """
-        user_prompt = item[1]
+        # user_prompt = item[1]
+        user_prompt = item["prompt"]
         prompt = PROMPT_PEREZ + "\nUSER: " + user_prompt + "\nGOPHER:"
         # TODO: The parameters for model prediction (i.e. temperature) can be
         #       configured. Leaving this as the defaults for the moment.
