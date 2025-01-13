@@ -4,3 +4,4 @@ cache/
 .env
 *.html
 .pytest_cache
+data/

@@ -68,7 +68,7 @@ class APIModel(WrapperModel):
         """
         input = self.preprocess(data=data)
         response = self._model_predict(inputs=input)
-        output = self.postprocess(responses=response)
+        output = self.postprocess(response=response)
         return output
 
     def _model_predict(self, inputs: List[str]) -> List[str]:

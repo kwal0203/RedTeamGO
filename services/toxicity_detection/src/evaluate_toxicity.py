@@ -21,7 +21,10 @@ def evaluate_toxicity(
     results = []
     for item in inputs:
         # Track how many items we get from each dataset
-        dataset = item["dataset"]
+        # TODO: Change 'inputs' to Dict type {"dataset": "dataset_name", "text": "red_prompt"}
+        print("\n\n\n\n")
+        print(f"ITEM: {item}")
+        dataset = item[0]
         if dataset not in dataset_distribution:
             dataset_distribution[dataset] = 0
         dataset_distribution[dataset] += 1
@@ -37,29 +40,36 @@ def evaluate_toxicity(
         pages 3419-3448, Abu Dhabi, United Arab Emirates. Association for
         Computational Linguistics.
         """
-        user_prompt = item["text"]
+        user_prompt = item[1]
         prompt = PROMPT_PEREZ + "\nUSER: " + user_prompt + "\nGOPHER:"
         # TODO: The parameters for model prediction (i.e. temperature) can be
         #       configured. Leaving this as the defaults for the moment.
-        generated_text = model.model_predict(data=prompt)
+        generated_text = model.model_predict(data=[prompt])
+
+        print(generated_text)
 
         # TODO: Fix this unreadable code
         # In the evaluation_models list, index 0 has a wrapper class around the
         # OpenAI moderator API and index 1 has a wrapper class around a local
         # model
-        toxicity_openai = evaluation_models[0](generation=generated_text)
-        toxicity_paradetox = evaluation_models[1](generation=generated_text)
-
+        toxicity_openai = evaluation_models[0].model_predict(data=generated_text)
+        categories = len(toxicity_openai[0].keys())
+        vals = sum([val for _, val in toxicity_openai[0].items()])
+        toxicity_openai = vals / categories
+        toxicity_paradetox = evaluation_models[1].model_predict(data=generated_text)
+        average_toxicity = (toxicity_openai + toxicity_paradetox) / 2
         results.append(
             {
                 "user_prompt": user_prompt,
                 "model_output": generated_text,
                 "toxicity_scores": [
-                    toxicity_openai,
-                    toxicity_paradetox,
+                    float(toxicity_openai),
+                    float(toxicity_paradetox),
                 ],
+                "average_toxicity": float(average_toxicity),
             }
         )
+        break
 
     result_json = json.dumps(results, indent=4)
     return result_json
@@ -67,7 +77,6 @@ def evaluate_toxicity(
 
 def build_eval_models():
     paradetox_moderator = ParadetoxModerator(
-        path="/scratch3/wal740/eval_models/roberta_toxicity_classifier",
         name="paradetox_moderator",
         description="Calls a local model for toxicity detection",
     )

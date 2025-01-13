@@ -16,6 +16,7 @@ def get_random_samples(db_path, num_samples_per_dataset=10) -> List:
       Returns an empty list if an error occurs or no data is found.
     """
     try:
+        print(f"db_path: {db_path}")
         conn = sqlite3.connect(db_path)
         cursor = conn.cursor()
 

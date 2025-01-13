@@ -28,19 +28,20 @@ class APIModelOpenai(APIModel):
         Returns:
             List[str]: A list of responses from the OpenAI API.
         """
+
         responses = []
         for input_text in inputs:
             try:
-                response = self.client.ChatCompletion.create(
-                    model="gpt-3.5-turbo",
+                response = self.client.chat.completions.create(
                     messages=[
                         # {"role": "system", "content": "You are a helpful assistant."},
                         {"role": "user", "content": input_text},
                     ],
+                    model="gpt-3.5-turbo",
                     max_tokens=150,
                     temperature=0.7,
                 )
-                responses.append(response["choices"][0]["message"]["content"])
+                responses.append(response.choices[0].message.content)
             except Exception as e:
                 responses.append(f"Error: {str(e)}")
         return responses

@@ -33,7 +33,7 @@ class APIModelGPTModerator(APIModel):
         results = []
         for input_text in inputs:
             try:
-                response = openai.moderations.create(input=input_text)
+                response = openai.moderations.create(input=input_text).to_dict()
                 moderation_result = response["results"][0]["category_scores"]
                 results.append(moderation_result)
             except Exception as e:

@@ -32,18 +32,17 @@ def toxicity_detection_service(
         # Grab num_samples random entries from the database
         # TODO: Turn the database into a service served through API, remove
         #       hard coded dp_path.
-        # db_path = (f"{os.getcwd()}/../../data/red_team_prompt_database.db",)
-        # if random:
-        #     inputs = get_random_samples(
-        #         db_path=db_path,
-        #         num_samples_per_dataset=num_samples,
-        #     )
-        # else:
-        #     inputs = get_samples(
-        #         db_path=db_path,
-        #         num_samples_per_dataset=num_samples,
-        #     )
-        return {"toxicity_evaluation": {}}
+        db_path = f"/home/wal740/RedTeamGO/data/red_team_prompt_database.db"
+        if random:
+            inputs = get_random_samples(
+                db_path=db_path,
+                num_samples_per_dataset=num_samples,
+            )
+        else:
+            inputs = get_samples(
+                db_path=db_path,
+                num_samples_per_dataset=num_samples,
+            )
     elif user_prompts:
         # User provided prompts
         print("----- automated_toxicity_detection_service: PROMPTS_NOT_IMPLEMENTED")
