@@ -15,8 +15,8 @@ def toxicity_detection_batch(args: DetectionBatchToxicity):
     # TODO: Check the structure of the model dump
     model_dump = args.model_dump()
     print(model_dump)
-    # toxicity_result = toxicity_detection_service(**args.model_dump())
-    toxicity_result = {"response": "NOT IMPLEMENTED"}
+    toxicity_result = toxicity_detection_service(**args.model_dump())
+    # toxicity_result = {"response": "NOT IMPLEMENTED"}
     # TODO: How do I want to process the raw toxicity evaluations?
     return ResultBatch(result=toxicity_result)
 

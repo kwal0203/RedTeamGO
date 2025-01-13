@@ -8,3 +8,4 @@ nltk
 transformers
 fitz
 torch
+pytest

@@ -8,16 +8,18 @@ from services.toxicity_detection.src.evaluate_toxicity import (
     evaluate_toxicity,
 )
 from typing import Dict, Any, Optional, List
+from utils.models import Model
 
 import os
 
 
 def toxicity_detection_service(
-    model: str,
+    model: Model,
     num_samples: int,
-    random: bool = True,
-    prompts: Optional[str] = None,
-    topics: Optional[List[str]] = None,
+    random: Optional[bool] = True,
+    database_prompts: Optional[bool] = True,
+    user_prompts: Optional[List[str]] = None,
+    user_topics: Optional[List[str]] = None,
 ) -> Dict[str, Any]:
 
     ### Instantiate target model
@@ -25,25 +27,30 @@ def toxicity_detection_service(
     target_model = APIModelOpenai(name=model["name"], description=model["description"])
 
     ### Instantiate red team data samples
-    if prompts:
+    if database_prompts:
         print("----- automated_toxicity_detection_service: database")
         # Grab num_samples random entries from the database
         # TODO: Turn the database into a service served through API, remove
         #       hard coded dp_path.
-        db_path = (f"{os.getcwd()}/../../data/red_team_prompt_database.db",)
-        if random:
-            inputs = get_random_samples(
-                db_path=db_path,
-                num_samples_per_dataset=num_samples,
-            )
-        else:
-            inputs = get_samples(
-                db_path=db_path,
-                num_samples_per_dataset=num_samples,
-            )
-    elif topics:
+        # db_path = (f"{os.getcwd()}/../../data/red_team_prompt_database.db",)
+        # if random:
+        #     inputs = get_random_samples(
+        #         db_path=db_path,
+        #         num_samples_per_dataset=num_samples,
+        #     )
+        # else:
+        #     inputs = get_samples(
+        #         db_path=db_path,
+        #         num_samples_per_dataset=num_samples,
+        #     )
+        return {"toxicity_evaluation": {}}
+    elif user_prompts:
+        # User provided prompts
+        print("----- automated_toxicity_detection_service: PROMPTS_NOT_IMPLEMENTED")
+        return {"toxicity_evaluation": {}}
+    elif user_topics:
         # Generate LLM inputs from user provided topics
-        print("----- automated_toxicity_detection_service: generated NOT_IMPLEMENTED")
+        print("----- automated_toxicity_detection_service: TOPICS_NOT_IMPLEMENTED")
         return {"toxicity_evaluation": {}}
     else:
         print("ERROR: INPUTS MUST BE GENERATED OR COME FROM DATABASE")

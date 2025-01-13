@@ -1,6 +1,4 @@
 from fastapi.testclient import TestClient
-
-from utils.models import Model
 from main import app
 
 import pytest
@@ -11,25 +9,89 @@ def client():
     return TestClient(app)
 
 
-def test_toxicity_detection_batch(client):
+# def test_reachable(client):
+#     model_data = {
+#         "name": "Example Model",
+#         "description": "A model for answering user questions.",
+#     }
+#     detection_batch = {
+#         "model": model_data,
+#         "num_samples": 10,
+#         "random": True,
+#         "database_prompts": None,
+#         "user_prompts": ["How is the weather today?"],
+#         "user_topics": None,
+#     }
+
+#     response = client.post("/toxicity-detection-batch", json=detection_batch)
+#     assert response.status_code == 200
+
+#     response_data = response.json()
+#     assert "result" in response_data
+#     assert "toxicity_evaluation" in response_data["result"]
+
+
+def test_database_prompts(client):
     model_data = {
         "name": "Example Model",
-        "description": "A model for detecting toxicity.",
+        "description": "A model for answering user questions.",
     }
-    # model_instance = Model(**model_data)
-
     detection_batch = {
-        "model": "Due",
+        "model": model_data,
         "num_samples": 10,
         "random": True,
-        "prompts": None,
-        "topics": ["topic1", "topic2"],
+        "database_prompts": True,
+        "user_prompts": None,
+        "user_topics": None,
     }
+
     response = client.post("/toxicity-detection-batch", json=detection_batch)
     assert response.status_code == 200
 
-    # Check if the response contains the expected structure
     response_data = response.json()
     assert "result" in response_data
-    assert "response" in response_data["result"]
-    assert response_data["result"]["response"] == "NOT IMPLEMENTED"
+    assert "toxicity_evaluation" in response_data["result"]
+
+
+def test_user_prompts_prompts(client):
+    model_data = {
+        "name": "Example Model",
+        "description": "A model for answering user questions.",
+    }
+    detection_batch = {
+        "model": model_data,
+        "num_samples": 10,
+        "random": None,
+        "database_prompts": None,
+        "user_prompts": ["How is the weather today?"],
+        "user_topics": None,
+    }
+
+    response = client.post("/toxicity-detection-batch", json=detection_batch)
+    assert response.status_code == 200
+
+    response_data = response.json()
+    assert "result" in response_data
+    assert "toxicity_evaluation" in response_data["result"]
+
+
+def test_user_topics(client):
+    model_data = {
+        "name": "Example Model",
+        "description": "A model for answering user questions.",
+    }
+    detection_batch = {
+        "model": model_data,
+        "num_samples": 10,
+        "random": None,
+        "database_prompts": None,
+        "user_prompts": None,
+        "user_topics": ["ai", "ml"],
+    }
+
+    response = client.post("/toxicity-detection-batch", json=detection_batch)
+    assert response.status_code == 200
+
+    response_data = response.json()
+    assert "result" in response_data
+    assert "toxicity_evaluation" in response_data["result"]

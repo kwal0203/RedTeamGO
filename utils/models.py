@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-from typing import List, Dict, Optional
+from typing import List, Dict, Optional, Any
 
 
 class UserPrompt(BaseModel):
@@ -11,7 +11,7 @@ class PromptLibrary(BaseModel):
 
 
 class ResultBatch(BaseModel):
-    result: Dict
+    result: Dict[str, Any]
 
 
 class ResultRealtime(BaseModel):
@@ -30,9 +30,10 @@ class DetectionBatchToxicity(BaseModel):
 
     model: Model
     num_samples: int
-    random: bool = True
-    prompts: Optional[PromptLibrary] = None
-    topics: Optional[List[str]] = None
+    random: Optional[bool] = True
+    database_prompts: Optional[bool] = True
+    user_prompts: Optional[List[str]] = None
+    user_topics: Optional[List[str]] = None
 
 
 class DetectionBatchBias(BaseModel):
