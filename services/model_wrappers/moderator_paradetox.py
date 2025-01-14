@@ -4,7 +4,7 @@ from transformers import (
     RobertaTokenizer,
     RobertaForSequenceClassification,
 )
-from utils.config import device
+from utils.config import get_device
 
 import numpy as np
 
@@ -51,7 +51,8 @@ class ParadetoxModerator(WrapperModel):
         path = "s-nlp/roberta_toxicity_classifier"
         self.model = RobertaForSequenceClassification.from_pretrained(path)
         self.tokenizer = RobertaTokenizer.from_pretrained(path)
-        self.model.to(device)
+        self.device = get_device()
+        self.model.to(self.device)
 
     def preprocess(self, data: List[str]) -> List[str]:
         """

@@ -27,7 +27,6 @@ def test_database_prompts(client):
     assert response.status_code == 200
 
     response_data = response.json()
-    print(f"YO: {response_data}")
     assert "result" in response_data
     assert "toxicity_evaluation" in response_data["result"]
 
