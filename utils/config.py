@@ -5,7 +5,8 @@ load_dotenv()
 
 
 def get_openai_key():
-    return os.getenv("API_KEY_OPENAI")
+    return "reeeeeeeeeeeeeeeeee"
+    # return os.getenv("API_KEY_OPENAI")
 
 
 def get_device():
