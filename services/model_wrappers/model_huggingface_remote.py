@@ -1,6 +1,6 @@
 from services.model_wrappers.base_model_remote import APIModel
 from typing import Optional, List
-from utils.config import get_hf_key
+from utils.config import get_hf_key, get_openai_key
 
 import openai
 
@@ -23,7 +23,11 @@ class APIModelHuggingFace(APIModel):
         """
         super().__init__(name=name, description=description)
         self.hf_token = get_hf_key()
-        self.client = openai.OpenAI(base_url=base_url, api_key=self.hf_token)
+        self.api_key = get_openai_key()
+        print(f"BASE URL: {base_url}")
+        print(f"TOKEN: {self.hf_token}")
+        print(f"API KEY: {self.api_key}")
+        self.client = openai.OpenAI(base_url=base_url, api_key=self.api_key)
 
     def _model_predict(self, inputs: List[str]) -> List[str]:
         """

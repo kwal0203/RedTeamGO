@@ -13,8 +13,9 @@ def test_database_prompts_huggingface(client):
     model_data = {
         "name": "huggingface model",
         "description": "A model for answering user questions.",
-        "base_url": "localhost",
+        "base_url": "http://localhost:8995/v1/chat/completions",
     }
+
     detection_batch = {
         "model": model_data,
         "num_samples": 1,
