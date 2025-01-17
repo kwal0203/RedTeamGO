@@ -21,6 +21,7 @@ class ResultRealtime(BaseModel):
 class Model(BaseModel):
     name: str
     description: str
+    base_url: Optional[str]
 
 
 class DetectionBatchToxicity(BaseModel):

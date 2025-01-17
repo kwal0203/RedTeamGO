@@ -1,5 +1,6 @@
 from services.model_wrappers.model_huggingface import HuggingFaceModel
 from services.model_wrappers.model_openai import APIModelOpenai
+from services.model_wrappers.model_huggingface_remote import APIModelHuggingFace
 from services.toxicity_detection.src.prompt_sampling import (
     get_random_samples,
     get_samples,
@@ -24,7 +25,21 @@ def toxicity_detection_service(
 
     ### Instantiate target model
     # TODO: It wont always be an Openai model i.e. APIModel or LocalModel here
-    target_model = APIModelOpenai(name=model["name"], description=model["description"])
+    if "openai" in model["name"]:
+        target_model = APIModelOpenai(
+            name=model["name"], description=model["description"]
+        )
+    elif "huggingface" in model["name"]:
+        target_model = APIModelHuggingFace(
+            base_url=model["base_url"],
+            name=model["name"],
+            description=model["description"],
+        )
+    else:
+        print(f"ERROR: 'openai' or 'huggingface' must be in the model name.")
+        return {
+            "toxicity_evaluation": "ERROR: 'openai' or 'huggingface' must be in the model name."
+        }
 
     ### Instantiate red team data samples
     if database_prompts:

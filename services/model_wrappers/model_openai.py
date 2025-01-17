@@ -1,5 +1,8 @@
 from services.model_wrappers.base_model_remote import APIModel
 from typing import Optional, List
+from utils.config import get_openai_key
+
+import openai
 
 
 class APIModelOpenai(APIModel):
@@ -17,6 +20,8 @@ class APIModelOpenai(APIModel):
         Initializes the OpenAI API model with the given name and description.
         """
         super().__init__(name=name, description=description)
+        openai.api_key = get_openai_key()
+        self.client = openai
 
     def _model_predict(self, inputs: List[str]) -> List[str]:
         """

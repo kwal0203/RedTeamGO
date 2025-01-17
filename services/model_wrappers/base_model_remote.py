@@ -1,8 +1,5 @@
 from services.model_wrappers.base_model import WrapperModel
 from typing import Optional, Dict, List
-from utils.config import get_openai_key
-
-import openai
 
 
 class APIModel(WrapperModel):
@@ -28,8 +25,6 @@ class APIModel(WrapperModel):
             description (Optional[str]): A description of the model being wrapped. Defaults to "Remote large language model".
         """
         super().__init__(name=name, description=description)
-        openai.api_key = get_openai_key()
-        self.client = openai
 
     def preprocess(self, data: List[Dict]) -> List[str]:
         """

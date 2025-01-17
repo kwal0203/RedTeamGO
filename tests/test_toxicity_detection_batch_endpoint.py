@@ -9,10 +9,11 @@ def client():
     return TestClient(app)
 
 
-def test_database_prompts(client):
+def test_database_prompts_huggingface(client):
     model_data = {
-        "name": "Example Model",
+        "name": "huggingface model",
         "description": "A model for answering user questions.",
+        "base_url": "localhost",
     }
     detection_batch = {
         "model": model_data,

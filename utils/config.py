@@ -10,3 +10,7 @@ def get_openai_key():
 
 def get_device():
     return os.getenv("DEVICE", "cpu")
+
+
+def get_hf_key():
+    return os.getenv("HF_TOKEN")
