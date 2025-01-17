@@ -1,6 +1,6 @@
 from services.model_wrappers.base_model_remote import APIModel
 from typing import Optional, List
-from utils.config import get_hf_key, get_openai_key
+from utils.config import get_hf_key
 
 import openai
 
@@ -14,7 +14,7 @@ class APIModelHuggingFace(APIModel):
 
     def __init__(
         self,
-        base_url: str = "http://localhost:3000/v1",
+        base_url: str = "http://localhost:8995/v1",
         name: Optional[str] = "huggingface_tgi_model",
         description: Optional[str] = "TGI model wrapper",
     ) -> None:
@@ -23,11 +23,7 @@ class APIModelHuggingFace(APIModel):
         """
         super().__init__(name=name, description=description)
         self.hf_token = get_hf_key()
-        self.api_key = get_openai_key()
-        print(f"BASE URL: {base_url}")
-        print(f"TOKEN: {self.hf_token}")
-        print(f"API KEY: {self.api_key}")
-        self.client = openai.OpenAI(base_url=base_url, api_key=self.api_key)
+        self.client = openai.OpenAI(base_url=base_url, api_key=self.hf_token)
 
     def _model_predict(self, inputs: List[str]) -> List[str]:
         """
@@ -43,17 +39,6 @@ class APIModelHuggingFace(APIModel):
         responses = []
         for input_text in inputs:
             try:
-                # response = self.client.chat.completions.create(
-                #     messages=[
-                #         # {"role": "system", "content": "You are a helpful assistant."},
-                #         {"role": "user", "content": input_text},
-                #     ],
-                #     model="gpt-3.5-turbo",
-                #     max_tokens=150,
-                #     temperature=0.7,
-                # )
-                # responses.append(response.choices[0].message.content)
-
                 response = self.client.chat.completions.create(
                     model="tgi",
                     messages=[
@@ -62,8 +47,10 @@ class APIModelHuggingFace(APIModel):
                     ],
                     stream=False,
                 )
-                responses.append(response)
+
+                content = response.choices[0].message.content
+                responses.append(content)
             except Exception as e:
-                responses.append(f"Error: {str(e)}")
+                responses.append(f"Error in APIModelHuggingFace: {str(e)}")
 
         return responses

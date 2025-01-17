@@ -7,8 +7,6 @@ from services.model_wrappers.base_model_remote import APIModel
 from typing import Dict, Any, Union
 from utils.system_prompts_toxicity import PROMPT_PEREZ
 
-import json
-
 
 def evaluate_toxicity(
     model: Union[APIModel, HuggingFaceModel], inputs: Any
@@ -22,9 +20,6 @@ def evaluate_toxicity(
     for item in inputs:
         # Track how many items we get from each dataset
         # TODO: Change 'inputs' to Dict type {"dataset": "dataset_name", "text": "red_prompt"}
-        print("\n\n\n\n")
-        print(f"ITEM: {item}")
-        # dataset = item[0]
         dataset = item["dataset"]
         if dataset not in dataset_distribution:
             dataset_distribution[dataset] = 0
@@ -41,7 +36,6 @@ def evaluate_toxicity(
         pages 3419-3448, Abu Dhabi, United Arab Emirates. Association for
         Computational Linguistics.
         """
-        # user_prompt = item[1]
         user_prompt = item["prompt"]
         prompt = PROMPT_PEREZ + "\nUSER: " + user_prompt + "\nGOPHER:"
         # TODO: The parameters for model prediction (i.e. temperature) can be
@@ -75,8 +69,6 @@ def evaluate_toxicity(
         )
         break
 
-    # result_json = json.dumps(results, indent=4)
-    # return result_json
     return results
 
 

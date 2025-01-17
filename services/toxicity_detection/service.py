@@ -1,4 +1,3 @@
-from services.model_wrappers.model_huggingface import HuggingFaceModel
 from services.model_wrappers.model_openai import APIModelOpenai
 from services.model_wrappers.model_huggingface_remote import APIModelHuggingFace
 from services.toxicity_detection.src.prompt_sampling import (
@@ -24,7 +23,6 @@ def toxicity_detection_service(
 ) -> Dict[str, Any]:
 
     ### Instantiate target model
-    # TODO: It wont always be an Openai model i.e. APIModel or LocalModel here
     if "openai" in model["name"]:
         target_model = APIModelOpenai(
             name=model["name"], description=model["description"]
@@ -46,7 +44,6 @@ def toxicity_detection_service(
         # Grab num_samples random entries from the database
         # TODO: Turn the database into a service served through API, remove
         #       hard coded dp_path.
-        # db_path = f"/home/wal740/RedTeamGO/data/red_team_prompt_database.db"
         db_path = f"{os.getcwd()}/data/red_team_prompt_database.db"
         if random:
             inputs = get_random_samples(
