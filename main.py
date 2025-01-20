@@ -12,15 +12,16 @@ app = FastAPI()
 @app.post("/toxicity-detection-batch", response_model=ResultBatch)
 def toxicity_detection_batch(args: DetectionBatchToxicity):
     print("----- toxicity_detection_batch")
-    toxicity_result = toxicity_detection_service(**args.model_dump())
-    return ResultBatch(result=toxicity_result)
+    # toxicity_result = toxicity_detection_service(**args.model_dump())
+    # return ResultBatch(result=toxicity_result)
+    return ResultBatch(result={"result": "NOT_IMPLEMENTED_TOXICITY"})
 
 
 @app.post("/bias-detection-batch", response_model=ResultBatch)
 def bias_detection_batch(args: DetectionBatchBias):
     print("----- bias_detection_batch")
     dbias_result = dbias_service(**args.model_dump())
-    return ResultBatch(result={"result": "NOT_IMPLEMENTED"})
+    return ResultBatch(result={"result": "NOT_IMPLEMENTED_BIAS"})
 
 
 @app.post("/toxicity-detection-realtime", response_model=ResultRealtime)
