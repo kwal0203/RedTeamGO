@@ -1,10 +1,10 @@
 from services.model_wrappers.base_model import WrapperModel
-from typing import Optional, Dict, List
+from typing import Optional, List
 from transformers import (
     RobertaTokenizer,
     RobertaForSequenceClassification,
 )
-from utils.config import device
+from utils.config import get_device
 
 import numpy as np
 
@@ -34,7 +34,6 @@ class ParadetoxModerator(WrapperModel):
 
     def __init__(
         self,
-        path: str,
         name: Optional[str] = "my_paradetox_model",
         description: Optional[str] = "Local large language model",
     ) -> None:
@@ -42,14 +41,18 @@ class ParadetoxModerator(WrapperModel):
         Initializes the ParaDetox wrapper class.
 
         Args:
-            name Optional[str]: A name for the wrapper class.
+            path (str): Path to the local model directory or HuggingFace model ID.
+            name Optional[str]: Name of the model being wrapped.
             description Optional[str]: Description of the model being wrapped.
         """
         super().__init__(name=name, description=description)
 
+        # Load the model and tokenizer
+        path = "s-nlp/roberta_toxicity_classifier"
         self.model = RobertaForSequenceClassification.from_pretrained(path)
         self.tokenizer = RobertaTokenizer.from_pretrained(path)
-        self.model.to(device)
+        self.device = get_device()
+        self.model.to(self.device)
 
     def preprocess(self, data: List[str]) -> List[str]:
         """
@@ -78,9 +81,9 @@ class ParadetoxModerator(WrapperModel):
             data (List[str]): TODO.
         """
 
-        input = self.preprocess(data=data)
+        input = self.preprocess(data=data[0])
         response = self._model_predict(inputs=input)
-        output = self.postprocess(responses=response)
+        output = self.postprocess(generated_text=response)
         return output
 
     def _model_predict(self, inputs) -> List[str]:
@@ -90,7 +93,7 @@ class ParadetoxModerator(WrapperModel):
         Args:
             inputs (List[int]): TODO.
         """
-        response_evaluation = self.model(data=inputs)
+        response_evaluation = self.model(inputs)
 
         def softmax(logits):
             exp_logits = np.exp(logits)

@@ -1,14 +1,7 @@
 cache/
 .vscode/
-DATA/
 **/__pycache__/
-ivcap
-.idea!/services/workflow_engine_service/app/services/data/agents.json
 .env
 *.html
-output.json
 .pytest_cache
-Makefile
-secret.py
 data/
-temp

@@ -1,6 +1,6 @@
 from typing import List, Any, Dict, Optional
+from utils.config import get_openai_key
 from openai import OpenAI
-from env import OPENAI_API_KEY
 
 
 class OpenAIModel:
@@ -36,7 +36,7 @@ class OpenAIModel:
             name (str): The OpenAI API name of the model.
             batch_size (int): The batch size used for inference. Default to 1.
         """
-        self.model = OpenAI(api_key=OPENAI_API_KEY)
+        self.model = OpenAI(api_key=get_openai_key())
         self.prompts = prompts
         self.fact_checker = fact_checker
         self.name = name

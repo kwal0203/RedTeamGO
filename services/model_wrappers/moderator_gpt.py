@@ -1,5 +1,6 @@
 from services.model_wrappers.base_model_remote import APIModel
 from typing import List, Optional
+from utils.config import get_openai_key
 
 import openai
 
@@ -19,6 +20,8 @@ class APIModelGPTModerator(APIModel):
         Initializes the OpenAI Moderator API model with the given name and description.
         """
         super().__init__(name=name, description=description)
+        openai.api_key = get_openai_key()
+        self.client = openai
 
     def _model_predict(self, inputs: List[str]) -> List[str]:
         """
@@ -33,7 +36,7 @@ class APIModelGPTModerator(APIModel):
         results = []
         for input_text in inputs:
             try:
-                response = openai.moderations.create(input=input_text)
+                response = openai.moderations.create(input=input_text).to_dict()
                 moderation_result = response["results"][0]["category_scores"]
                 results.append(moderation_result)
             except Exception as e:

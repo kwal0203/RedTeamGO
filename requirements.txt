@@ -1,3 +1,4 @@
+torch
 openai
 pydantic
 fastapi
@@ -7,3 +8,4 @@ streamlit
 nltk
 transformers
 fitz
+pytest

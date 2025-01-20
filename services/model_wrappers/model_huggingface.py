@@ -4,7 +4,7 @@ from transformers import (
     AutoModelForCausalLM,
     AutoTokenizer,
 )
-from utils.config import device
+from utils.config import get_device
 
 
 class HuggingFaceModel(WrapperModel):
@@ -41,7 +41,8 @@ class HuggingFaceModel(WrapperModel):
 
         self.model = AutoModelForCausalLM.from_pretrained(name)
         self.tokenizer = AutoTokenizer.from_pretrained(name)
-        self.model.to(device)
+        self.device = get_device()
+        self.model.to(self.device)
 
     def preprocess(self, data: List[str]) -> List[str]:
         """
@@ -51,7 +52,9 @@ class HuggingFaceModel(WrapperModel):
             data (List[str]): TODO.
         """
         tokens = [
-            self.tokenizer(i + self.tokenizer.eos_token, return_tensors="pt").to(device)
+            self.tokenizer(i + self.tokenizer.eos_token, return_tensors="pt").to(
+                self.device
+            )
             for i in data
         ]
         return tokens

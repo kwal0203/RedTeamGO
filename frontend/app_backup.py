@@ -12,11 +12,10 @@ from utils.utils import (
 
 from frontend.html_snippets import *
 
-from dotenv import load_dotenv
-import os
+from utils.config import get_openai_key
 
-load_dotenv()
-API_KEY = os.getenv("OPENAI_API_KEY")
+OPENAI_API_KEY = get_openai_key()
+
 
 import streamlit as st
 
@@ -54,7 +53,7 @@ def update_model_ui(model_name: Any) -> None:
     if model_name == "llama3-instruct":
         client = HuggingFaceModel(name="meta-llama/Meta-Llama-3-8B-Instruct")
     elif model_name == "gpt-3.5-turbo":
-        client = OpenAI(api_key=API_KEY)
+        client = OpenAI(api_key=OPENAI_API_KEY)
     else:
         st.markdown("Unknown model")
 
@@ -73,8 +72,8 @@ st.markdown(TITLE, unsafe_allow_html=True)
 # Default model, OpenAI API
 # TODO: Need to update this to retain previous state values
 st.session_state.model_name = "gpt-3.5-turbo"
-st.session_state.model_client = OpenAI(api_key=API_KEY)
-st.session_state.model_client_semantic = OpenAI(api_key=API_KEY)
+st.session_state.model_client = OpenAI(api_key=OPENAI_API_KEY)
+st.session_state.model_client_semantic = OpenAI(api_key=OPENAI_API_KEY)
 st.session_state.attack = "none"
 st.session_state.attack_nice = "No attack"
 st.session_state.mode = "Manual"

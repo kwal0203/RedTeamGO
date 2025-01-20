@@ -1,10 +1,7 @@
-from utils.models import ToxicityEvaluationModel
 from typing import List, Any, Dict
 
 import json
-import fitz
 import csv
-import re
 
 
 def hijack_log(results_hijack: Any):
@@ -30,23 +27,25 @@ def hijack_log(results_hijack: Any):
     return responses_adversarial
 
 
-def extract_text_from_pdf(file):
-    num_lines = 0
-    pdf_document = fitz.open(stream=file.read(), filetype="pdf")
-    text = ""
-    for page_num in range(len(pdf_document)):
-        page = pdf_document.load_page(page_num)
-        page_text = page.get_text()
+# import fitz
+# import re
+# def extract_text_from_pdf(file):
+#     num_lines = 0
+#     pdf_document = fitz.open(stream=file.read(), filetype="pdf")
+#     text = ""
+#     for page_num in range(len(pdf_document)):
+#         page = pdf_document.load_page(page_num)
+#         page_text = page.get_text()
 
-        lines = page_text.splitlines()
-        filtered_lines = [line for line in lines if not line.strip().isdigit()]
-        num_lines += len(filtered_lines)
-        text += " ".join(filtered_lines)
-        if num_lines > 20:
-            break
+#         lines = page_text.splitlines()
+#         filtered_lines = [line for line in lines if not line.strip().isdigit()]
+#         num_lines += len(filtered_lines)
+#         text += " ".join(filtered_lines)
+#         if num_lines > 20:
+#             break
 
-    text = re.sub(r"-\s+", "", text)
-    return text
+#     text = re.sub(r"-\s+", "", text)
+#     return text
 
 
 def generate_report(

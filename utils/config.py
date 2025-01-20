@@ -3,5 +3,14 @@ import os
 
 load_dotenv()
 
-api_key_openai = os.getenv("API_KEY_OPENAI")
-device = os.getenv("DEVICE", "cpu")
+
+def get_openai_key():
+    return os.getenv("API_KEY_OPENAI")
+
+
+def get_device():
+    return os.getenv("DEVICE", "cpu")
+
+
+def get_hf_key():
+    return os.getenv("HF_TOKEN")
