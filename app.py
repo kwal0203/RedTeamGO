@@ -1,5 +1,6 @@
 from services.toxicity_detection.service import toxicity_detection_service
 from utils.config import get_openai_key
+from typing import Any, Dict
 from openai import OpenAI
 
 import streamlit as st
@@ -46,6 +47,36 @@ if st.sidebar.button("Policy deployment"):
         # 2. Show prompt being regenerated according to policy
         # 3. Put original prompt in streamlit messages as developer
 
+
+def get_payload(target: str) -> Dict[str, Any]:
+    if target == "hf":
+        return {
+            "model": {
+                "name": "huggingface_llama3.1",
+                "description": "Local llama3.1 model",
+                "base_url": "http://localhost:8995/v1",
+            },
+            "num_samples": 1,
+            "random": True,
+            "database_prompts": True,
+            "user_prompts": None,
+            "user_topics": None,
+        }
+    else:
+        return {
+            "model": {
+                "name": "huggingface_llama3.1",
+                "description": "Local llama3.1 model",
+                "base_url": "http://localhost:8995/v1",
+            },
+            "num_samples": 1,
+            "random": True,
+            "database_prompts": True,
+            "user_prompts": None,
+            "user_topics": None,
+        }
+
+
 if st.sidebar.button("Model audit"):
     if "mode" in st.session_state and st.session_state.mode == "compliance":
         # run the redteam function
@@ -59,18 +90,11 @@ if st.sidebar.button("Model audit"):
             }
         )
 
-        payload = {
-            "model": {
-                "name": "huggingface_llama3.1",
-                "description": "Local llama3.1 model",
-                "base_url": "http://localhost:8995/v1",
-            },
-            "num_samples": 1,
-            "random": True,
-            "database_prompts": True,
-            "user_prompts": None,
-            "user_topics": None,
-        }
+        target = "hf"
+        if target == "hf":
+            payload = get_payload(target=target)
+        else:
+            payload = get_payload(target=target)
 
         # return {"toxicity_evaluation": results}
         results = toxicity_detection_service(**payload)
