@@ -4,6 +4,7 @@ from typing import Any, Dict
 from openai import OpenAI
 
 import streamlit as st
+import requests
 
 st.title("ScienceDigital")
 
@@ -42,10 +43,11 @@ if st.sidebar.button("Policy deployment"):
                 "content": "Policy summarization and deployment activated",
             }
         )
-        # run the function that summarizes the policy document
-        # 1. Show user summarized policies
-        # 2. Show prompt being regenerated according to policy
-        # 3. Put original prompt in streamlit messages as developer
+        response = requests.get(f"http://localhost:8000/policy-dashboard")
+        if response.status_code == 200:
+            print("Policy successfully deployed")
+        else:
+            st.error("Failed to fetch data from the backend.")
 
 
 def get_payload(target: str) -> Dict[str, Any]:
@@ -100,9 +102,18 @@ if st.sidebar.button("Model audit"):
         results = toxicity_detection_service(**payload)
         print(results)
 
-if st.sidebar.button("Dashboard"):
-    # Click button to open result dashboard
-    pass
+        # POST results to security dashboard docker
+        response = requests.post(
+            url="http://localhost:8001/security-dashboard", json=results
+        )
+        if response.status_code == 200:
+            print("Security policy successfully deployed")
+        else:
+            st.error("Failed to fetch data from the backend.")
+
+sideb = st.sidebar
+sideb.link_button("Policy Dashboard", "http://localhost:8502")
+sideb.link_button("Security Dashboard", "http://localhost:8503")
 
 
 def display_conversation():

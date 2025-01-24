@@ -23,7 +23,7 @@ def toxicity_detection_service(
 ) -> Dict[str, Any]:
 
     print("----- automated_toxicity_detection_service: PROMPTS_NOT_IMPLEMENTED")
-    return {"toxicity_evaluation": {}}
+    return {"results": "ehehehehhehe"}
 
     ### Instantiate target model
     if "openai" in model["name"]:
