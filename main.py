@@ -7,13 +7,11 @@ from services.toxicity_detection.service import (
 )
 from services.bias_detection_dbias.service import dbias_service
 
+# Create FastAPI app
 app = FastAPI()
 
-
-# Initialize Prometheus metrics
-@app.on_event("startup")
-async def startup():
-    Instrumentator().instrument(app).expose(app)
+# Set up Prometheus instrumentation
+Instrumentator().instrument(app).expose(app)
 
 
 @app.get("/health")

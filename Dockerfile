@@ -1,5 +1,5 @@
 # Build stage
-FROM python:3.10-slim as builder
+FROM python:3.10-slim AS builder
 
 # Set working directory
 WORKDIR /app
@@ -34,6 +34,20 @@ COPY --from=builder /usr/local/bin/ /usr/local/bin/
 
 # Copy application code
 COPY . .
+
+# Create data directory if it doesn't exist
+RUN mkdir -p data
+
+# Set up database if it doesn't exist
+RUN if [ ! -f data/red_team_prompt_database.db ]; then \
+        echo "Setting up red team prompt database..." && \
+        cd scripts && \
+        python3 script_copy_data.py && \
+        python3 script_generate_db.py && \
+        cd ..; \
+    else \
+        echo "Database already exists, skipping setup."; \
+    fi
 
 # Set ownership to non-root user
 RUN chown -R appuser:appuser /app

@@ -21,6 +21,7 @@ services:
           memory: 2G
     volumes:
       - ./logs:/app/logs
+      - redteam_data:/app/data
 
   redis:
     image: redis:alpine
@@ -61,3 +62,4 @@ volumes:
   redis_data:
   prometheus_data:
   grafana_data:
+  redteam_data:
