@@ -21,6 +21,7 @@ class APIModelOpenai(APIModel):
         """
         super().__init__(name=name, description=description)
         openai.api_key = get_openai_key()
+        print(f"----- APIModelOpenai: {openai.api_key} XXXXX")
         self.client = openai
 
     def _model_predict(self, inputs: List[str]) -> List[str]:

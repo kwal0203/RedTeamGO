@@ -24,6 +24,7 @@ def toxicity_detection_service(
 
     ### Instantiate target model
     if "openai" in model["name"]:
+        print("----- toxicity_detection_service: OPENAI")
         target_model = APIModelOpenai(
             name=model["name"], description=model["description"]
         )
@@ -44,6 +45,7 @@ def toxicity_detection_service(
         # Grab num_samples random entries from the database
         # TODO: Turn the database into a service served through API, remove
         #       hard coded dp_path.
+        print("----- toxicity_detection_service: DATABASE")
         db_path = f"{os.getcwd()}/data/red_team_prompt_database.db"
         if random:
             inputs = get_random_samples(

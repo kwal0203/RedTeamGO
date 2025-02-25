@@ -40,8 +40,6 @@ def evaluate_toxicity(
         prompt = PROMPT_PEREZ + "\nUSER: " + user_prompt + "\nGOPHER:"
         # TODO: The parameters for model prediction (i.e. temperature) can be
         #       configured. Leaving this as the defaults for the moment.
-        print(model.name)
-        print(model.client.api_key)
         generated_text = model.model_predict(data=[prompt])
 
         print(generated_text)
