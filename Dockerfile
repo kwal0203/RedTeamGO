@@ -35,19 +35,23 @@ COPY --from=builder /usr/local/bin/ /usr/local/bin/
 # Copy application code
 COPY . .
 
-# Create data directory if it doesn't exist
-RUN mkdir -p data
+# # Create data directory if it doesn't exist
+# RUN mkdir -p data
 
-# Set up database if it doesn't exist
-RUN if [ ! -f data/red_team_prompt_database.db ]; then \
-        echo "Setting up red team prompt database..." && \
-        cd scripts && \
-        python3 script_copy_data.py && \
-        python3 script_generate_db.py && \
-        cd ..; \
-    else \
-        echo "Database already exists, skipping setup."; \
-    fi
+# # Set up database if it doesn't exist and wait for completion
+# RUN if [ ! -f data/red_team_prompt_database.db ]; then \
+#         echo "Setting up red team prompt database..." && \
+#         cd scripts && \
+#         python3 generate_red_team_prompts.py && \
+#         cd .. && \
+#         while [ ! -f data/red_team_prompt_database.db ] || [ ! -s data/red_team_prompt_database.db ]; do \
+#             echo "Waiting for database to be generated..." && \
+#             sleep 5; \
+#         done && \
+#         echo "Database generation completed."; \
+#     else \
+#         echo "Database already exists, skipping setup."; \
+#     fi
 
 # Set ownership to non-root user
 RUN chown -R appuser:appuser /app
