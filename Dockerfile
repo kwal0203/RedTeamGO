@@ -7,6 +7,7 @@ WORKDIR /app
 # Install build dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
+    curl \
     && rm -rf /var/lib/apt/lists/*
 
 # Install Python dependencies
@@ -16,6 +17,11 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Runtime stage
 FROM python:3.10-slim
 
+# Install runtime dependencies
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    curl \
+    && rm -rf /var/lib/apt/lists/*
+
 # Create non-root user
 RUN useradd -m -u 1000 appuser
 
@@ -24,6 +30,7 @@ WORKDIR /app
 
 # Copy Python dependencies from builder
 COPY --from=builder /usr/local/lib/python3.10/site-packages/ /usr/local/lib/python3.10/site-packages/
+COPY --from=builder /usr/local/bin/ /usr/local/bin/
 
 # Copy application code
 COPY . .

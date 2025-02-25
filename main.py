@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from prometheus_fastapi_instrumentator import Instrumentator
 from utils.models import *
 from utils.utils import *
 from services.toxicity_detection.service import (
@@ -7,6 +8,17 @@ from services.toxicity_detection.service import (
 from services.bias_detection_dbias.service import dbias_service
 
 app = FastAPI()
+
+
+# Initialize Prometheus metrics
+@app.on_event("startup")
+async def startup():
+    Instrumentator().instrument(app).expose(app)
+
+
+@app.get("/health")
+async def health_check():
+    return {"status": "healthy"}
 
 
 @app.post("/toxicity-detection-batch", response_model=ResultBatch)
