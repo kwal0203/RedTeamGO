@@ -1,5 +1,5 @@
 # Build stage
-FROM node:18-alpine AS builder
+FROM node:18.19.0-alpine3.19 AS builder
 
 WORKDIR /app
 
@@ -16,7 +16,7 @@ COPY . .
 RUN npm run build
 
 # Runtime stage
-FROM node:18-alpine
+FROM node:18.19.0-alpine3.19
 
 WORKDIR /app
 
@@ -29,5 +29,5 @@ COPY --from=builder /app/build ./build
 # Expose port
 EXPOSE 3001
 
-# Start the application
-CMD ["serve", "-s", "build", "-l", "3001"]
+# Start the application with single-page application support
+CMD ["serve", "-s", "build", "-l", "3001", "--single"]
