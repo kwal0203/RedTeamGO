@@ -3,11 +3,14 @@ FROM node:18.19.0-alpine3.19 AS builder
 
 WORKDIR /app
 
+# Install dependencies required for building node modules
+RUN apk add --no-cache python3 make g++
+
 # Copy package files
 COPY package*.json ./
 
 # Install dependencies
-RUN npm install
+RUN npm install --legacy-peer-deps
 
 # Copy the rest of the application
 COPY . .
