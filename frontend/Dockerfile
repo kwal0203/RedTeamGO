@@ -30,7 +30,7 @@ RUN npm install -g serve
 COPY --from=builder /app/build ./build
 
 # Expose port
-EXPOSE 3001
+EXPOSE 3000
 
 # Start the application with single-page application support
-CMD ["serve", "-s", "build", "-l", "3001", "--single"]
+CMD ["serve", "-s", "build", "-l", "3000", "--single"]
