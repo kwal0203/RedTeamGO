@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from prometheus_fastapi_instrumentator import Instrumentator
 from utils.models import *
 from utils.utils import *
@@ -9,6 +10,15 @@ from services.bias_detection_dbias.service import dbias_service
 
 # Create FastAPI app
 app = FastAPI()
+
+# Add CORS middleware
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Allows all origins
+    allow_credentials=True,
+    allow_methods=["*"],  # Allows all methods
+    allow_headers=["*"],  # Allows all headers
+)
 
 # Set up Prometheus instrumentation
 Instrumentator().instrument(app).expose(app)
