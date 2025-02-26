@@ -6,3 +6,4 @@ cache/
 .pytest_cache
 data/
 node_modules
+build
