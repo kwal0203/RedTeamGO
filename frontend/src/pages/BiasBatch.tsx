@@ -5,17 +5,14 @@ import {
   FormControl,
   FormLabel,
   Input,
+  NumberInput,
+  NumberInputField,
+  Switch,
   VStack,
   useToast,
   Text,
   Card,
   CardBody,
-  Select,
-  Tag,
-  TagLabel,
-  TagCloseButton,
-  Wrap,
-  WrapItem,
 } from '@chakra-ui/react';
 import { useMutation } from '@tanstack/react-query';
 import axios from 'axios';
@@ -26,22 +23,12 @@ interface BiasRequest {
     description: string;
     base_url: string | null;
   };
-  prompts: {
-    prompt_library_path: string;
-  };
-  topics: string[];
+  num_samples: number;
+  random: boolean;
+  database_prompts: boolean;
+  user_prompts: string[] | null;
+  user_topics: string[] | null;
 }
-
-const AVAILABLE_TOPICS = [
-  'gender',
-  'race',
-  'religion',
-  'age',
-  'disability',
-  'nationality',
-  'appearance',
-  'socioeconomic',
-];
 
 export default function BiasBatch() {
   const toast = useToast();
@@ -51,10 +38,11 @@ export default function BiasBatch() {
       description: 'OpenAI model for bias testing',
       base_url: null,
     },
-    prompts: {
-      prompt_library_path: 'path/to/prompts.json',
-    },
-    topics: [],
+    num_samples: 5,
+    random: true,
+    database_prompts: true,
+    user_prompts: null,
+    user_topics: null,
   });
 
   const mutation = useMutation({
@@ -81,22 +69,6 @@ export default function BiasBatch() {
       });
     },
   });
-
-  const handleAddTopic = (topic: string) => {
-    if (!formData.topics.includes(topic)) {
-      setFormData({
-        ...formData,
-        topics: [...formData.topics, topic],
-      });
-    }
-  };
-
-  const handleRemoveTopic = (topic: string) => {
-    setFormData({
-      ...formData,
-      topics: formData.topics.filter((t) => t !== topic),
-    });
-  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -127,49 +99,44 @@ export default function BiasBatch() {
               </FormControl>
 
               <FormControl>
-                <FormLabel>Prompt Library Path</FormLabel>
-                <Input
-                  value={formData.prompts.prompt_library_path}
+                <FormLabel>Number of Samples</FormLabel>
+                <NumberInput
+                  value={formData.num_samples}
+                  onChange={(_, value) =>
+                    setFormData({ ...formData, num_samples: value })
+                  }
+                  min={1}
+                  max={100}
+                >
+                  <NumberInputField />
+                </NumberInput>
+              </FormControl>
+
+              <FormControl display="flex" alignItems="center">
+                <FormLabel mb="0">Use Random Sampling</FormLabel>
+                <Switch
+                  isChecked={formData.random}
                   onChange={(e) =>
-                    setFormData({
-                      ...formData,
-                      prompts: { prompt_library_path: e.target.value },
-                    })
+                    setFormData({ ...formData, random: e.target.checked })
                   }
                 />
               </FormControl>
 
-              <FormControl>
-                <FormLabel>Add Topics</FormLabel>
-                <Select
-                  placeholder="Select topic"
-                  onChange={(e) => handleAddTopic(e.target.value)}
-                >
-                  {AVAILABLE_TOPICS.map((topic) => (
-                    <option key={topic} value={topic}>
-                      {topic.charAt(0).toUpperCase() + topic.slice(1)}
-                    </option>
-                  ))}
-                </Select>
+              <FormControl display="flex" alignItems="center">
+                <FormLabel mb="0">Use Database Prompts</FormLabel>
+                <Switch
+                  isChecked={formData.database_prompts}
+                  onChange={(e) =>
+                    setFormData({ ...formData, database_prompts: e.target.checked })
+                  }
+                />
               </FormControl>
-
-              <Wrap spacing={2}>
-                {formData.topics.map((topic) => (
-                  <WrapItem key={topic}>
-                    <Tag size="md" borderRadius="full" variant="solid" colorScheme="blue">
-                      <TagLabel>{topic}</TagLabel>
-                      <TagCloseButton onClick={() => handleRemoveTopic(topic)} />
-                    </Tag>
-                  </WrapItem>
-                ))}
-              </Wrap>
 
               <Button
                 mt={4}
                 colorScheme="blue"
                 isLoading={mutation.isPending}
                 type="submit"
-                isDisabled={formData.topics.length === 0}
               >
                 Run Analysis
               </Button>

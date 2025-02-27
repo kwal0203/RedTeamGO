@@ -37,14 +37,27 @@ class DetectionBatchToxicity(BaseModel):
     user_topics: Optional[List[str]] = None
 
 
+# class DetectionBatchBias(BaseModel):
+#     """
+#     For use in offline system auditing setting.
+#     """
+
+#     model: Model
+#     prompts: Optional[PromptLibrary] = None
+#     topics: Optional[List[str]] = [""]
+
+
 class DetectionBatchBias(BaseModel):
     """
     For use in offline system auditing setting.
     """
 
     model: Model
-    prompts: Optional[PromptLibrary] = None
-    topics: Optional[List[str]] = [""]
+    num_samples: int
+    random: Optional[bool] = True
+    database_prompts: Optional[bool] = True
+    user_prompts: Optional[List[str]] = None
+    user_topics: Optional[List[str]] = None
 
 
 class ManualDetection(BaseModel):
