@@ -1,69 +1,100 @@
 # RedTeamGO
 
 ## Overview
-This project provides a proof-of-concept **Red Teaming System** designed to rigorously test and evaluate the security, robustness, and ethical behavior of Large Language Models (LLMs). The system generates adversarial scenarios to expose vulnerabilities and ensure the models meet high standards of safety and reliability.
+RedTeamGO is a comprehensive system for evaluating Large Language Models (LLMs) through automated testing of toxicity and bias detection. The system provides both batch processing capabilities for systematic evaluation and real-time analysis for interactive testing.
 
 ## Features
-- **Adversarial Prompt Generation:** Automatically creates challenging prompts to test the boundaries of LLM behavior.
-- **Scenario Simulation:** Generates diverse real-world scenarios to assess LLM responses under different contexts.
-- **Behavioral Analysis:** Evaluates model responses against ethical guidelines, security policies, and desired behavior baselines.
-- **Customizable Framework:** Supports user-defined testing parameters and adversarial strategies.
-
-## Use Cases
-- Identifying vulnerabilities in LLMs.
-- Evaluating the robustness of LLMs against adversarial inputs.
-- Ensuring compliance with ethical and safety standards.
+- **Toxicity Detection:** Evaluates model outputs for harmful or toxic content
+- **Bias Detection:** Analyzes responses for various types of bias (gender, racial, religious, etc.)
+- **Batch Processing:** Test multiple prompts systematically
+- **Real-time Analysis:** Immediate feedback for individual prompts
+- **Multiple Model Support:** Compatible with OpenAI and HuggingFace models
+- **Monitoring:** Integrated Prometheus and Grafana dashboards for system metrics
 
 ## Installation
+
 1. Clone the repository:
    ```bash
-   git clone https://github.com/your-username/red-teaming-llm.git
-   cd red-teaming-llm
+   git clone https://github.com/your-username/RedTeamGO.git
+   cd RedTeamGO
    ```
+
 2. Install the required dependencies:
    ```bash
    pip install -r requirements.txt
    ```
 
 ## Usage
-1. Run the system with the default configuration:
-   ```bash
-   python main.py
-   ```
-2. Customize testing scenarios by editing the `config.yaml` file.
-3. View the generated reports in the `results/` directory.
 
-## Configuration
-The `config.yaml` file allows you to:
-- Set the type of adversarial prompts.
-- Define test cases and ethical guidelines.
-- Specify the LLM API or model endpoint to test.
-
-### Example Configuration
-Here’s an example of running the system to test an OpenAI GPT-based model:
-```yaml
-model_endpoint: "https://api.openai.com/v1/completions"
-api_key: "your_api_key_here"
-test_scenarios:
-  - type: "prompt_injection"
-    description: "Test for injections that bypass restrictions."
-  - type: "data_poisoning"
-    description: "Evaluate model response to poisoned inputs."
+### Development Mode
+Run the FastAPI server directly with auto-reload for development:
+```bash
+uvicorn main:app --host 0.0.0.0 --port 8000 --reload
 ```
+
+### Production Mode
+Use Docker Compose to run the full stack:
+```bash
+docker-compose up
+```
+
+This will start:
+- Backend API (port 8000)
+- Frontend UI (port 3000)
+- Redis cache
+- Prometheus metrics (port 9090)
+- Grafana dashboard (port 3002)
+
+### Testing the API
+You can use the provided test scripts in the `examples` directory:
+
+```bash
+# Test bias detection
+python test_bias_detection.py
+
+# Test toxicity detection
+python examples/toxicity_batch_example.py
+```
+
+## API Endpoints
+
+- `POST /toxicity-detection-batch`: Batch toxicity analysis
+- `POST /bias-detection-batch`: Batch bias analysis
+- `POST /toxicity-detection-realtime`: Real-time toxicity check
+- `POST /bias-detection-realtime`: Real-time bias check
+- `GET /health`: Service health check
 
 ## Directory Structure
 ```
 .
-├── main.py               # Entry point for the system
-├── adversarial_tests/    # Contains adversarial test strategies
-├── analysis/             # Behavioral analysis modules
-├── config.yaml           # User-defined configuration
-├── results/              # Generated test reports
-└── README.md             # Project documentation
+├── services/                    # Core services
+│   ├── bias_detection_dbias/   # Bias detection implementation
+│   ├── toxicity_detection/     # Toxicity detection implementation
+│   └── model_wrappers/         # Model interface implementations
+├── frontend/                   # React frontend application
+├── examples/                   # API usage examples
+├── utils/                     # Shared utilities
+├── main.py                    # FastAPI application entry point
+└── docker-compose.yml         # Container orchestration
 ```
 
+## Configuration
+The system can be configured through environment variables or Docker Compose:
+- Model endpoints and API keys
+- CORS settings
+- Resource limits
+- Monitoring configuration
+
 ## Contributing
-We welcome contributions! Please open an issue or submit a pull request.
+We welcome contributions! Please:
+1. Fork the repository
+2. Create a feature branch
+3. Submit a pull request
+
+## References
+The system implements methods from:
+- Bias Detection: Raza, S., et al. "Dbias: detecting biases and ensuring fairness in news articles." (2024)
+- Toxicity Detection: Perez, E., et al. "Red Teaming Language Models with Language Models." (2022)
 
 ## License
 This project is licensed under the MIT License. See `LICENSE` for details.
