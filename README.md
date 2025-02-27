@@ -1,7 +1,7 @@
 # RedTeamGO
 
 ## Overview
-RedTeamGO is a comprehensive system for evaluating Large Language Models (LLMs) through automated testing of toxicity and bias detection. The system provides both batch processing capabilities for systematic evaluation and real-time analysis for interactive testing.
+RedTeamGO is a proof of concept system for evaluating Large Language Models (LLMs) through automated testing of toxicity and bias detection. The system provides both batch processing capabilities for systematic evaluation and real-time analysis for interactive testing.
 
 ## Features
 - **Toxicity Detection:** Evaluates model outputs for harmful or toxic content
@@ -66,13 +66,13 @@ python examples/toxicity_batch_example.py
 
 ## Directory Structure
 ```
-.
-├── services/                    # Core services
-│   ├── bias_detection_dbias/   # Bias detection implementation
-│   ├── toxicity_detection/     # Toxicity detection implementation
-│   └── model_wrappers/         # Model interface implementations
-├── frontend/                   # React frontend application
-├── examples/                   # API usage examples
+RedTeamGO
+├── services/                  # Core services
+│   ├── bias_detection_dbias/  # Bias detection implementation
+│   ├── toxicity_detection/    # Toxicity detection implementation
+│   └── model_wrappers/        # Model interface implementations
+├── frontend/                  # React frontend application
+├── examples/                  # API usage examples
 ├── utils/                     # Shared utilities
 ├── main.py                    # FastAPI application entry point
 └── docker-compose.yml         # Container orchestration
@@ -84,12 +84,6 @@ The system can be configured through environment variables or Docker Compose:
 - CORS settings
 - Resource limits
 - Monitoring configuration
-
-## Contributing
-We welcome contributions! Please:
-1. Fork the repository
-2. Create a feature branch
-3. Submit a pull request
 
 ## References
 The system implements methods from:
