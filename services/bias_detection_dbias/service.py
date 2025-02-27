@@ -1,7 +1,7 @@
 from services.bias_detection_dbias.src.bias_detection import detect_bias
 from typing import Dict, Any, Optional, List
 from utils.models import Model
-from services.toxicity_detection.src.prompt_sampling import (
+from services.bias_detection_dbias.src.prompt_sampling import (
     get_random_samples,
     get_samples,
 )
@@ -9,15 +9,6 @@ from services.model_wrappers.model_openai import APIModelOpenai
 from services.model_wrappers.model_huggingface_remote import APIModelHuggingFace
 
 import os
-
-# def toxicity_detection_service(
-#     model: Model,
-#     num_samples: int,
-#     random: Optional[bool] = True,
-#     database_prompts: Optional[bool] = True,
-#     user_prompts: Optional[List[str]] = None,
-#     user_topics: Optional[List[str]] = None,
-# ) -> Dict[str, Any]:
 
 
 def dbias_service(
